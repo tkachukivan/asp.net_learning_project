@@ -11,12 +11,11 @@ using Microsoft.IdentityModel.Tokens;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MessageBoardBackend.Controllers
+namespace ContactManagerBackend.Controllers
 {
     public class JwtPacket
     {
-        public string Token
-        { get; set; }
+        public string Token { get; set; }
 
         public string FirstName { get; set; }
     }

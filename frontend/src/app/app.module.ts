@@ -9,33 +9,29 @@ import {
   MatInputModule,
   MatSnackBarModule,
   MatToolbarModule,
+  MatNativeDateModule,
+  MatDatepickerModule,
+  MatIconModule,
+  MatIconRegistry 
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
 
 import { WebService } from './web.service';
 import { HttpClientModule } from '@angular/common/http';
-import { NewMessageComponent } from './new-message/new-message.component';
-import { MessagesComponent } from './messages/messages.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './user/user.component';
+import { ContactsListComponent } from './contacts-list/contacts-list.component';
+import { ContactComponent } from './contact/contact.component';
 
 const routes = [
   {
     path: '',
     component: HomeComponent,
-  },
-  {
-    path: 'messages',
-    component: MessagesComponent,
-  },
-  {
-    path: 'messages/:name',
-    component: MessagesComponent
   },
   {
     path: 'register',
@@ -48,19 +44,27 @@ const routes = [
   {
     path: 'user',
     component: UserComponent
-  }
+  },
+  {
+    path: 'contact/new',
+    component: ContactComponent,
+  },
+  {
+    path: 'contact/:contactId',
+    component: ContactComponent,
+  },
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    MessagesComponent,
-    NewMessageComponent,
     NavComponent,
     HomeComponent,
     RegisterComponent,
     LoginComponent,
     UserComponent,
+    ContactsListComponent,
+    ContactComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,9 +78,13 @@ const routes = [
     MatInputModule,
     MatSnackBarModule,
     MatToolbarModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatIconModule,
   ],
   providers: [
     WebService,
+    MatIconRegistry
   ],
   bootstrap: [AppComponent]
 })

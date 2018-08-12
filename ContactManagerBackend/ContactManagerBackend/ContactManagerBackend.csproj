@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>ContactManagerBackend</AssemblyName>
+    <RootNamespace>ContactManagerBackend</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\EmptyClass.cs" />
+    <Compile Remove="EmptyClass.cs" />
+    <Compile Remove="Controllers\ValuesController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+</Project>

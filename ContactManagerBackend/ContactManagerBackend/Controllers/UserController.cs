@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MessageBoardBackend.Controllers
+namespace ContactManagerBackend.Controllers
 {
     public class EditProfileData
     {
@@ -23,19 +23,6 @@ namespace MessageBoardBackend.Controllers
         public UsersController(ApiContext context)
         {
             this.context = context;
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult Get(string id)
-        {
-            var user = context.Users.SingleOrDefault(
-                (u) => u.Id == id
-            );
-
-            if (user == null)
-                return NotFound("User not found");
-
-            return Ok(user);
         }
 
         [Authorize]

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MessageBoardBackend.Models
+namespace ContactManagerBackend.Models
 {
     public class User
     {

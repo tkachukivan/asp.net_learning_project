@@ -1,2 +1,12 @@
-<app-new-message></app-new-message>
-<app-messages></app-messages>
+<div *ngIf="authService.isAuthenticated">
+    <mat-card>
+        <button mat-raised-button color="primary" [routerLink]="['/contact', 'new']">Add contact</button>  
+    </mat-card>
+    
+    <app-contacts-list></app-contacts-list>
+</div>
+<div *ngIf="!authService.isAuthenticated">
+        <mat-card>
+            <mat-card-title>Authorize to manage your contacts</mat-card-title>  
+        </mat-card>
+</div>

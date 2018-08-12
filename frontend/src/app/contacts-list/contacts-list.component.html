@@ -1,0 +1,14 @@
+<mat-card>
+    <mat-card-title>Your Contacts</mat-card-title>
+
+    <div *ngFor="let contact of webService.contacts | async">
+        <mat-card style="margin: 8px">
+            <mat-card-title [routerLink]="['/contact', contact.id]" style="cursor: pointer;">
+                {{contact.firstName}} {{contact.lastName}}
+            </mat-card-title>
+            <mat-card-content>{{contact.email}}</mat-card-content>
+            <mat-card-content>{{contact.mobilePhone}}</mat-card-content>
+            <mat-icon style="cursor: pointer;" (click)="removeContact(contact.id)">delete</mat-icon>
+        </mat-card>
+    </div>
+</mat-card>

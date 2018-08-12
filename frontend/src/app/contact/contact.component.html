@@ -1,0 +1,82 @@
+<mat-card>
+    <form
+        *ngIf="form"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        style="display: flex; flex-direction: column;"
+    >
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="First Name"
+                type="text"
+                formControlName="firstName"
+                >
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Middle Name"
+                type="text"
+                formControlName="middleName"
+                >
+        </mat-form-field>
+        
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Last Name"
+                formControlName="lastName"
+                type="text">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Email"
+                formControlName="email"
+                type="email">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Address"
+                formControlName="address"
+                type="text">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Mobile Phone"
+                formControlName="mobilePhone"
+                type="text">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Home Phone"
+                formControlName="homePhone"
+                type="text">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                [matDatepicker]="picker"
+                placeholder="Choose a date"
+                formControlName="birthdate"
+                [max]="maxDatepickerDate"
+                >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+                
+        <br>
+
+        <button mat-raised-button color="primary">{{ isContactNew ? "Create" : "Update" }} Contact</button>
+    </form>
+</mat-card>
