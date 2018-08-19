@@ -50,7 +50,7 @@ namespace ContactManagerBackend.Controllers
         {
             var id = HttpContext.User.Claims.First().Value;
 
-            return context.Users.SingleOrDefault((u) => u.Id == id);
+            return context.Users.SingleOrDefault((u) => u.Id == Guid.Parse(id));
         }
     }
 }

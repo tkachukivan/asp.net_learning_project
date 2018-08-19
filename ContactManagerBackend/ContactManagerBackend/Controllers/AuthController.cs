@@ -69,7 +69,7 @@ namespace ContactManagerBackend.Controllers
 
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id)
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
             };
 
             var jwt = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials);

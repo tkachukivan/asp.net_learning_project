@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { WebService } from '../web.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -12,6 +12,21 @@ export class ContactComponent implements OnInit {
     contactId;
     isContactNew = true;
     maxDatepickerDate = new Date();
+
+    phoneTypes = [
+        {
+            value: 0,
+            viewValue: 'Home'
+        },
+        {
+            value: 1,
+            viewValue: 'Mobile'
+        },
+        {
+            value: 2,
+            viewValue: 'Other'
+        },
+    ]
 
     constructor(
         private fb: FormBuilder,
@@ -43,21 +58,55 @@ export class ContactComponent implements OnInit {
         lastName = '',
         middleName = '',
         email = '',
-        address = '',
+        address = {},
         birthdate = '',
-        mobilePhone = '',
-        homePhone = '',
+        phones = [],
     }: any) {
+        const phonesArray = new FormArray([]);
+        const addressFormGroup = new FormGroup({
+            country: new FormControl(address.country || '', Validators.required),
+            city: new FormControl(address.city || '', Validators.required),
+            street: new FormControl(address.street || '', Validators.required),
+            building: new FormControl(address.building || '', Validators.required),
+            appartments: new FormControl(address.appartments || '', Validators.required),
+            zipCode: new FormControl(address.zipCode || '', Validators.required),
+        })
+
+        for (const phone of phones) {
+            phonesArray.push(
+                new FormGroup({
+                    number: new FormControl( phone.number, Validators.required ),
+                    type: new FormControl( phone.type, Validators.required )
+                })
+            );
+        }
+        
         this.form = this.fb.group({
             firstName: [firstName, Validators.required],
             lastName: [lastName, Validators.required],
             middleName: middleName,
             email: [email, [Validators.required]],
-            address: address,
+            address: addressFormGroup,
             birthdate: birthdate,
-            mobilePhone: [mobilePhone, [Validators.required]],
-            homePhone: homePhone,
+            phones: phonesArray,
         });
+    }
+
+    addNewPhone() {
+        const phonesFormArray = this.form.get('phones');
+        
+        phonesFormArray.push(
+            new FormGroup({
+                number: new FormControl( null, Validators.required ),
+                type: new FormControl( null, Validators.required )
+            })
+        )
+    }
+
+    removePhone(index) {
+        const phonesFormArray = this.form.get('phones');
+        
+        phonesFormArray.removeAt(index);
     }
 
     onSubmit() {

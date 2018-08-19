@@ -12,7 +12,9 @@ import {
   MatNativeDateModule,
   MatDatepickerModule,
   MatIconModule,
-  MatIconRegistry 
+  MatIconRegistry,
+  MatOptionModule,
+  MatSelectModule,
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -81,6 +83,8 @@ const routes = [
     MatNativeDateModule,
     MatDatepickerModule,
     MatIconModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
   providers: [
     WebService,

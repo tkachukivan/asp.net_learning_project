@@ -5,17 +5,34 @@ using System.Threading.Tasks;
 
 namespace ContactManagerBackend.Models
 {
+    public class Phone
+    {
+        public Guid Id { get; set; }
+        public string Number { get; set; }
+        public Enums.PhoneType Type { get; set; }
+    }
+
+    public class Address
+    {
+        public Guid Id { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string Building { get; set; }
+        public string Appartments { get; set; }
+        public string ZipCode { get; set; }
+    }
+
     public class Contact
     {
-        public string Id { get; set; }
-        public string OwnerId { get; set; }
+        public Guid Id { get; set; }
+        public Guid OwnerId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
-        public string Birthdate { get; set; }
-        public string MobilePhone { get; set; }
-        public string HomePhone { get; set; }
+        public Address Address { get; set; }
+        public DateTime Birthdate { get; set; }
+        public List<Phone> Phones { get; set; }
     }
 }

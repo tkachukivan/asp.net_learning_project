@@ -89,15 +89,17 @@ namespace ContactManagerBackend
 
         public void SeedData(ApiContext context)
         {
+            Models.User MockUser = new Models.User
+            {
+                Email = "a",
+                FirstName = "Tim",
+                LastName = "a",
+                Password = "a",
+                Id = Guid.NewGuid(),
+            };
+
             context.Users.Add(
-                new Models.User
-                {
-                    Email = "a",
-                    FirstName = "Tim",
-                    LastName = "a",
-                    Password = "a",
-                    Id = "1"
-                }
+                MockUser
             );
 
             context.Contacts.Add(
@@ -107,12 +109,31 @@ namespace ContactManagerBackend
                     FirstName = "Tim",
                     MiddleName = "MIDDLE",
                     LastName = "a",
-                    OwnerId = "1",
-                    Id = "1",
-                    Address = "address",
-                    Birthdate = "date",
-                    MobilePhone = "121312",
-                    HomePhone = "12322"
+                    OwnerId = MockUser.Id,
+                    Id = Guid.NewGuid(),
+                    Address = new Models.Address
+                    {
+                        Country = "Poland",
+                        City = "Krakow",
+                        Street = "Rynok Glowny",
+                        Building = "1",
+                        Appartments = "1",
+                        ZipCode = "1",
+                    },
+                    Birthdate = DateTime.Today,
+                    Phones = new List<Models.Phone>
+                        {
+                            new Models.Phone
+                            {
+                                Type = Enums.PhoneType.Home,
+                                Number = "1234323",
+                            },
+                            new Models.Phone
+                            {
+                                Type = Enums.PhoneType.Other,
+                                Number = "12133455",
+                            }
+                        }
                 }
             );
 

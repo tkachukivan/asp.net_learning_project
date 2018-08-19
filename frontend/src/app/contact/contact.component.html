@@ -4,7 +4,8 @@
         [formGroup]="form"
         (ngSubmit)="onSubmit()"
         style="display: flex; flex-direction: column;"
-    >
+    >   
+        <mat-card-title>Contact Info</mat-card-title>
         <mat-form-field>
             <input
                 matInput
@@ -42,30 +43,6 @@
         <mat-form-field>
             <input
                 matInput
-                placeholder="Address"
-                formControlName="address"
-                type="text">
-        </mat-form-field>
-
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Mobile Phone"
-                formControlName="mobilePhone"
-                type="text">
-        </mat-form-field>
-
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Home Phone"
-                formControlName="homePhone"
-                type="text">
-        </mat-form-field>
-
-        <mat-form-field>
-            <input
-                matInput
                 [matDatepicker]="picker"
                 placeholder="Choose a date"
                 formControlName="birthdate"
@@ -74,8 +51,89 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-                
-        <br>
+
+        <div formArrayName="phones">
+            <mat-card-title style="display: flex; justify-content: space-between;">
+                Phones
+
+                <button mat-button color="primary" (click)="addNewPhone()">Add new phone</button>
+            </mat-card-title>
+            
+            <div
+                *ngFor="let phone of form.get('phones').controls; let i = index"
+                [formGroupName]="i"
+            >
+                <mat-form-field >
+                    <input
+                        matInput
+                        placeholder="Phone Number"
+                        formControlName="number"
+                        type="text">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-select placeholder="Phone Type" formControlName="type">
+                        <mat-option *ngFor="let type of phoneTypes" [value]="type.value">
+                            {{type.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-icon style="cursor: pointer;" (click)="removePhone(i)">delete</mat-icon>
+            </div>
+        </div>
+
+        <div formGroupName="address" style="width: 100%; display: flex; flex-direction: column;">
+            <mat-card-title>Address</mat-card-title>
+
+            <mat-form-field >
+                <input
+                    matInput
+                    placeholder="Country"
+                    formControlName="country"
+                    type="text">
+            </mat-form-field>
+
+            <mat-form-field >
+                <input
+                    matInput
+                    placeholder="City"
+                    formControlName="city"
+                    type="text">
+            </mat-form-field>
+
+            <mat-form-field >
+                <input
+                    matInput
+                    placeholder="Street"
+                    formControlName="street"
+                    type="text">
+            </mat-form-field>
+
+            <mat-form-field >
+                <input
+                    matInput
+                    placeholder="Building"
+                    formControlName="building"
+                    type="text">
+            </mat-form-field>
+
+            <mat-form-field >
+                <input
+                    matInput
+                    placeholder="Appartments"
+                    formControlName="appartments"
+                    type="text">
+            </mat-form-field>
+
+            <mat-form-field >
+                <input
+                    matInput
+                    placeholder="Zip Code"
+                    formControlName="zipCode"
+                    type="text">
+            </mat-form-field>
+        </div>
 
         <button mat-raised-button color="primary">{{ isContactNew ? "Create" : "Update" }} Contact</button>
     </form>

@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContactManagerBackend.Controllers
 {
     [Route("api/Contacts")]
     [ApiController]
-    public class ContactsController : ControllerBase
+    public class ContactsController : Controller
     {
         readonly ApiContext context;
 
@@ -25,16 +26,31 @@ namespace ContactManagerBackend.Controllers
         {
             Models.User CurrentUser = GetSecureUser();
 
-            var UserContacts = context.Contacts.Where( contact => contact.OwnerId == CurrentUser.Id);
+            if (CurrentUser == null)
+            {
+                return NotFound("No user");
+            }
+
+            var UserContacts = context.Contacts.Where( contact => contact.OwnerId == CurrentUser.Id)
+                                                .Include( c => c.Phones)
+                                                .Include(c => c.Address)
+                                                .ToList();
 
             return Ok(UserContacts);
         }
 
         [Authorize]
         [HttpGet("{contactId}")]
-        public ActionResult GetById(string contactId)
+        public ActionResult GetById(Guid contactId)
         {
-            Models.Contact Contact = context.Contacts.SingleOrDefault(contact => contact.Id == contactId);
+            Models.Contact Contact = context.Contacts.Include(c => c.Phones)
+                                                    .Include(c => c.Address)
+                                                    .SingleOrDefault(contact => contact.Id == contactId);
+
+            if (Contact == null)
+            {
+                return NotFound("Contact Not Found");
+            }
 
             return Ok(Contact);
         }
@@ -44,6 +60,12 @@ namespace ContactManagerBackend.Controllers
         public ActionResult Post([FromBody] Models.Contact contact)
         {
             Models.User CurrentUser = GetSecureUser();
+
+            if (CurrentUser == null)
+            {
+                return NotFound("No user to add contact");
+            }
+
             contact.OwnerId = CurrentUser.Id;
             Models.Contact dbContact = context.Contacts.Add(contact).Entity;
 
@@ -54,33 +76,57 @@ namespace ContactManagerBackend.Controllers
 
         [Authorize]
         [HttpPut("{contactId}")]
-        public ActionResult Put(string contactId, [FromBody] Models.Contact contactData)
+        public ActionResult Put(Guid contactId, [FromBody] Models.Contact contactData)
         {
-            Models.User CurrentUser = GetSecureUser();
+            Models.Contact ContactToUpdate = context.Contacts.Include(c => c.Phones)
+                                                            .Include(c => c.Address)
+                                                            .SingleOrDefault( contact => contact.Id == contactId);
 
-            Models.Contact contactToUpdate = context.Contacts.SingleOrDefault( contact => contact.Id == contactId);
+            if (ContactToUpdate == null) {
+                return NotFound("Contact Not Found");
+            }
 
-            contactToUpdate.FirstName = contactData.FirstName ?? contactToUpdate.FirstName;
-            contactToUpdate.LastName = contactData.LastName ?? contactToUpdate.LastName;
-            contactToUpdate.MiddleName = contactData.MiddleName ?? contactToUpdate.MiddleName;
-            contactToUpdate.Address = contactData.Address ?? contactToUpdate.Address;
-            contactToUpdate.Email = contactData.Email ?? contactToUpdate.Email;
-            contactToUpdate.HomePhone = contactData.HomePhone ?? contactToUpdate.HomePhone;
-            contactToUpdate.MobilePhone = contactData.MobilePhone ?? contactToUpdate.MobilePhone;
-            contactToUpdate.Birthdate = contactData.Birthdate ?? contactToUpdate.Birthdate;
+            ContactToUpdate.FirstName = contactData.FirstName ?? ContactToUpdate.FirstName;
+            ContactToUpdate.LastName = contactData.LastName ?? ContactToUpdate.LastName;
+            ContactToUpdate.MiddleName = contactData.MiddleName ?? ContactToUpdate.MiddleName;
 
+            if (ContactToUpdate.Address != null && contactData.Address != null)
+            {
+                ContactToUpdate.Address.Country = contactData.Address.Country ?? ContactToUpdate.Address.Country;
+                ContactToUpdate.Address.City = contactData.Address.City ?? ContactToUpdate.Address.City;
+                ContactToUpdate.Address.Street = contactData.Address.Street ?? ContactToUpdate.Address.Street;
+                ContactToUpdate.Address.ZipCode = contactData.Address.ZipCode ?? ContactToUpdate.Address.ZipCode;
+                ContactToUpdate.Address.Building = contactData.Address.Building ?? ContactToUpdate.Address.Building;
+                ContactToUpdate.Address.Appartments = contactData.Address.Appartments ?? ContactToUpdate.Address.Appartments;
+            }
+
+            ContactToUpdate.Email = contactData.Email ?? ContactToUpdate.Email;
+            ContactToUpdate.Phones = contactData.Phones ?? ContactToUpdate.Phones;
+            
+            if (contactData.Birthdate != null)
+            {
+                ContactToUpdate.Birthdate = contactData.Birthdate;
+            }
+            
             context.SaveChanges();
 
-            return Ok(contactToUpdate);
+            return Ok(ContactToUpdate);
         }
 
         [Authorize]
         [HttpDelete("{contactId}")]
-        public ActionResult Delete(string contactId)
+        public ActionResult Delete(Guid contactId)
         {
-            Models.Contact contactToDelete = context.Contacts.SingleOrDefault(contact => contact.Id == contactId);
+            Models.Contact ContactToDelete = context.Contacts.Include(c => c.Phones)
+                                                            .Include(c => c.Address)
+                                                            .SingleOrDefault(contact => contact.Id == contactId);
 
-            context.Contacts.Remove(contactToDelete);
+            if (ContactToDelete == null)
+            {
+                return NotFound("Contact Not Found");
+            }
+
+            context.Contacts.Remove(ContactToDelete);
 
             context.SaveChanges();
 
@@ -92,7 +138,7 @@ namespace ContactManagerBackend.Controllers
         {
             var id = HttpContext.User.Claims.First().Value;
 
-            return context.Users.SingleOrDefault((u) => u.Id == id);
+            return context.Users.SingleOrDefault((u) => u.Id == Guid.Parse(id));
         }
     }
 }
