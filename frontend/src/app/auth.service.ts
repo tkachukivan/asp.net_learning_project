@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -7,17 +7,21 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-    BASE_URL = 'https://localhost:5001/auth';
+    BASE_URL = 'http://localhost:59561/api/auth';
     NAME_KEY = 'name';
     TOKEN_KEY = 'token';
 
     constructor(
         private http: HttpClient,
-        private router: Router
+        private router: Router,
     ) { }
 
     get name() {
         return localStorage.getItem(this.NAME_KEY);
+    }
+
+    set name(value) {
+        localStorage.setItem(this.NAME_KEY, value);
     }
 
     get isAuthenticated() {
@@ -44,10 +48,20 @@ export class AuthService {
             );
     }
 
-    login(loginDate) {
+    login(loginData) {
+        loginData.grant_type = 'password'
+        const httpParams = new HttpParams()
+            .append('username', loginData.userName)
+            .append('password', loginData.password)
+            .append('grant_type', 'password');
+
         this.http.post(
             `${this.BASE_URL}/login`,
-            loginDate
+            httpParams.toString(),
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/x-www-form-urlencoded'),
+            }
         )
         .subscribe( (res) => {
             this.authenticate(res);
@@ -60,13 +74,16 @@ export class AuthService {
         this.router.navigate(['/login']);
     }
 
-    authenticate({ token, firstName }: any) {
-        if (!token) {
+    authenticate({ access_token, userName }: any) {
+        if (!access_token) {
             return;
         }
 
-        localStorage.setItem(this.TOKEN_KEY, token);
-        localStorage.setItem(this.NAME_KEY, firstName);
+        localStorage.setItem(this.TOKEN_KEY, access_token);
+        if (userName) {
+            localStorage.setItem(this.NAME_KEY, userName);
+        }
+        
 
         this.router.navigate(['/']);
     }

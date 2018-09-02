@@ -8,7 +8,7 @@ import { AuthService } from '../auth.service';
 export class LoginComponent implements OnInit {
 
     loginData = {
-        email: '',
+        userName: '',
         password: ''
     };
 
@@ -20,8 +20,8 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        this.auth.login(this.loginData);
-        this.loginData.email = '';
+        this.auth.login({ ...this.loginData });
+        this.loginData.userName = '';
         this.loginData.password = '';
     }
 

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class WebService {
 
-    BASE_URL = 'https://localhost:5001/api';
+    BASE_URL = 'http://localhost:59561/api';
 
     private contactsStore: any = [];
 
@@ -87,7 +87,7 @@ export class WebService {
         return this.http.post(`${this.BASE_URL}/users/me`, user, { headers: this.auth.tokenHeader })
             .subscribe(
                 (res: any) => {
-                    localStorage.setItem(this.auth.NAME_KEY, res.firstName);
+                    localStorage.setItem(this.auth.NAME_KEY, res.userName);
                 }
             );
     }
