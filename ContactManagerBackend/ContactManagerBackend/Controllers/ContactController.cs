@@ -1,89 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Web;
+using System.Web.Http;
+using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Claims;
 
 namespace ContactManagerBackend.Controllers
 {
-    [Route("api/Contacts")]
-    [ApiController]
-    public class ContactsController : Controller
+    [Authorize]
+    public class ContactsController : ApiController
     {
-        readonly ApiContext context;
+        readonly ApiContext context = new ApiContext();
 
-        public ContactsController(ApiContext context)
+        public ContactsController()
         {
-            this.context = context;
         }
 
-        [Authorize]
-        [HttpGet()]
-        public ActionResult Get()
+        // GET api/<controller>
+        public IHttpActionResult Get()
         {
-            Models.User CurrentUser = GetSecureUser();
+            var CurrentUserId = GetCurrentUserId();
 
-            if (CurrentUser == null)
+            if (CurrentUserId == null)
             {
-                return NotFound("No user");
+                return NotFound();
             }
 
-            var UserContacts = context.Contacts.Where( contact => contact.OwnerId == CurrentUser.Id)
-                                                .Include( c => c.Phones)
+            var UserContacts = context.Contacts.Where(contact => contact.OwnerId == CurrentUserId)
+                                                .Include(c => c.Phones)
                                                 .Include(c => c.Address)
                                                 .ToList();
 
             return Ok(UserContacts);
         }
 
-        [Authorize]
-        [HttpGet("{contactId}")]
-        public ActionResult GetById(Guid contactId)
+        // GET api/<controller>/5
+        public IHttpActionResult Get(int id)
         {
             Models.Contact Contact = context.Contacts.Include(c => c.Phones)
                                                     .Include(c => c.Address)
-                                                    .SingleOrDefault(contact => contact.Id == contactId);
+                                                    .SingleOrDefault(contact => contact.Id == id);
 
             if (Contact == null)
             {
-                return NotFound("Contact Not Found");
+                return NotFound();
             }
 
             return Ok(Contact);
         }
 
-        [Authorize]
-        [HttpPost()]
-        public ActionResult Post([FromBody] Models.Contact contact)
+        // POST api/<controller>
+        public IHttpActionResult Post([FromBody]Models.Contact contact)
         {
-            Models.User CurrentUser = GetSecureUser();
+            var CurrentUserId = GetCurrentUserId();
 
-            if (CurrentUser == null)
+            if (CurrentUserId == null)
             {
-                return NotFound("No user to add contact");
+                return NotFound();
             }
 
-            contact.OwnerId = CurrentUser.Id;
-            Models.Contact dbContact = context.Contacts.Add(contact).Entity;
+           contact.OwnerId = CurrentUserId;
+            var dbContact = context.Contacts.Add(contact);
 
             context.SaveChanges();
 
             return Ok(dbContact);
         }
 
-        [Authorize]
-        [HttpPut("{contactId}")]
-        public ActionResult Put(Guid contactId, [FromBody] Models.Contact contactData)
+        // PUT api/<controller>/5
+        public IHttpActionResult Put(int id, [FromBody]Models.Contact contactData)
         {
             Models.Contact ContactToUpdate = context.Contacts.Include(c => c.Phones)
                                                             .Include(c => c.Address)
-                                                            .SingleOrDefault( contact => contact.Id == contactId);
+                                                            .SingleOrDefault(contact => contact.Id == id);
 
-            if (ContactToUpdate == null) {
-                return NotFound("Contact Not Found");
+            if (ContactToUpdate == null)
+            {
+                return NotFound();
             }
 
             ContactToUpdate.FirstName = contactData.FirstName ?? ContactToUpdate.FirstName;
@@ -102,28 +97,27 @@ namespace ContactManagerBackend.Controllers
 
             ContactToUpdate.Email = contactData.Email ?? ContactToUpdate.Email;
             ContactToUpdate.Phones = contactData.Phones ?? ContactToUpdate.Phones;
-            
+
             if (contactData.Birthdate != null)
             {
                 ContactToUpdate.Birthdate = contactData.Birthdate;
             }
-            
+
             context.SaveChanges();
 
             return Ok(ContactToUpdate);
         }
 
-        [Authorize]
-        [HttpDelete("{contactId}")]
-        public ActionResult Delete(Guid contactId)
+        // DELETE api/<controller>/5
+        public IHttpActionResult Delete(int id)
         {
             Models.Contact ContactToDelete = context.Contacts.Include(c => c.Phones)
                                                             .Include(c => c.Address)
-                                                            .SingleOrDefault(contact => contact.Id == contactId);
+                                                            .SingleOrDefault(contact => contact.Id == id);
 
             if (ContactToDelete == null)
             {
-                return NotFound("Contact Not Found");
+                return NotFound();
             }
 
             context.Contacts.Remove(ContactToDelete);
@@ -133,12 +127,19 @@ namespace ContactManagerBackend.Controllers
             return Ok();
         }
 
-
-        Models.User GetSecureUser()
+        private Guid GetCurrentUserId()
         {
-            var id = HttpContext.User.Claims.First().Value;
+            var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
 
-            return context.Users.SingleOrDefault((u) => u.Id == Guid.Parse(id));
+            if (identity == null)
+            {
+                return default(Guid);
+            }
+
+            var id = identity.Claims
+                             .FirstOrDefault(çlaim => çlaim.Type == "id")?.Value;
+
+            return Guid.Parse(id);
         }
     }
 }
