@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class WebService {
 
-    BASE_URL = 'http://localhost:59561/api';
+    BASE_URL = 'http://localhost:8888/api';
 
     private contactsStore: any = [];
 
