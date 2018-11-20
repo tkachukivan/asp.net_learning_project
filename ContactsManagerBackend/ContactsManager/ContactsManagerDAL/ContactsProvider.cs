@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 
 namespace ContactsManagerDAL
@@ -14,28 +11,27 @@ namespace ContactsManagerDAL
             List<Contact> Contacts = new List<Contact>();
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
+            using (SqlCommand cmd = conn.CreateCommand())
             {
-                using (SqlCommand cmd = conn.CreateCommand())
+                cmd.CommandText = "getContacts";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                SqlDataReader reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+                if (reader.HasRows)
                 {
-                    cmd.CommandText = @"getContacts";
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-                    SqlDataReader reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-
-                    if (reader.HasRows)
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            var c = new Contact();
+                        var contact = new Contact();
 
-                            c.Id = reader.GetGuid(0);
-                            c.FirstName = reader.GetString(1);
-                            c.LastName = reader.GetString(2);
-                            c.Email = reader.GetString(3);
-                            c.Birthdate = reader.GetDateTime(4);
+                        contact.Id = Guid.Parse(reader["Id"].ToString());
+                        contact.FirstName = reader["FirstName"].ToString();
+                        contact.LastName = reader["LastName"].ToString();
+                        contact.Email = reader["Email"].ToString();
+                        contact.Birthdate = Convert.ToDateTime(reader["Birthdate"].ToString());
 
-                            Contacts.Add(c);
-                        }
+
+                        Contacts.Add(contact);
                     }
                 }
             }
