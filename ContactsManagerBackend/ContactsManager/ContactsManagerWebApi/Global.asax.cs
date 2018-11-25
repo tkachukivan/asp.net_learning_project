@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using ContactsManagerWebApi.App_Start;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace ContactsManagerWebApi
@@ -9,6 +10,7 @@ namespace ContactsManagerWebApi
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            MapperInitializator.Initializate();
         }
     }
 }

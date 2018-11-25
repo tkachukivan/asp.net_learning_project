@@ -163,11 +163,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\MapperInitializator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -195,10 +197,6 @@
     <ProjectReference Include="..\ContactsManagerBL\ContactsManagerBL.csproj">
       <Project>{0db035a2-a319-47fb-80cf-f45cafca1226}</Project>
       <Name>ContactsManagerBL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ContactsManagerDAL\ContactsManagerDAL.csproj">
-      <Project>{DEBEC1E2-8468-46E5-BB0E-A19F6B03870B}</Project>
-      <Name>ContactsManagerDAL</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

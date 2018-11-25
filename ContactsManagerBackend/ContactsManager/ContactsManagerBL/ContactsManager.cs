@@ -1,4 +1,5 @@
-﻿using ContactsManagerDAL;
+﻿using AutoMapper;
+using ContactsManagerDAL;
 using System.Collections.Generic;
 
 namespace ContactsManagerBL
@@ -7,9 +8,11 @@ namespace ContactsManagerBL
     {
         private ContactsProvider ContactsProvider { get; } = new ContactsProvider();
 
-        public List<Contact> GetContacts()
+        public List<ContactModel> GetContacts()
         {
-            return ContactsProvider.GetContacts();
+            var contacts = MappingDto.Mapper.Map<List<ContactDto>, List<ContactModel>>(ContactsProvider.GetContacts());
+
+            return contacts;
         }
     }
 }

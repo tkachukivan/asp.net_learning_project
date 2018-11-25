@@ -3,7 +3,7 @@ using System.Web.Http;
 using System.Net.Http.Formatting;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http.Cors;
-using AutoMapper;
+using ContactsManagerBL;
 
 namespace ContactsManagerWebApi
 {
