@@ -1,4 +1,4 @@
-﻿using ContactsManagerBL;
+﻿using AutoMapper;
 
 namespace ContactsManagerWebApi.App_Start
 {
@@ -6,8 +6,7 @@ namespace ContactsManagerWebApi.App_Start
     {
         public static void Initializate()
         {
-            MappingDto.InitializeMapping();
-            MappingModel.InitializeMapping();
+            Mapper.Initialize(cfg => { });
         }
     }
 }

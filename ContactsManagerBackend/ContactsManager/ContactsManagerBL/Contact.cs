@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ContactsManagerDAL
+namespace ContactsManagerBL
 {
-    public class ContactModel
+    public class Contact
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

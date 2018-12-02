@@ -6,9 +6,9 @@ namespace ContactsManagerDAL
 {
     public class ContactsProvider
     {
-        public List<ContactDto> GetContacts()
+        public List<Contact> GetContacts()
         {
-            List<ContactDto> Contacts = new List<ContactDto>();
+            List<Contact> Contacts = new List<Contact>();
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
@@ -22,7 +22,7 @@ namespace ContactsManagerDAL
                 {
                     while (reader.Read())
                     {
-                        var contact = new ContactDto();
+                        var contact = new Contact();
 
                         contact.Id = Guid.Parse(reader["Id"].ToString());
                         contact.FirstName = reader["FirstName"].ToString();

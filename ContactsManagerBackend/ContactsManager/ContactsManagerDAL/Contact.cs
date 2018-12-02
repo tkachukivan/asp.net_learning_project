@@ -2,7 +2,7 @@
 
 namespace ContactsManagerDAL
 {
-    public class ContactDto
+    public class Contact
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

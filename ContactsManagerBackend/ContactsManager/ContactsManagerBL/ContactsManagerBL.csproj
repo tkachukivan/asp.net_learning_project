@@ -46,9 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContactModel.cs" />
+    <Compile Include="Contact.cs" />
     <Compile Include="ContactsManager.cs" />
-    <Compile Include="MappingDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

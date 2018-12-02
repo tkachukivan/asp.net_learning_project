@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ContactsManagerDAL
+namespace ContactsManagerWebApi
 {
     public class Contact
     {
