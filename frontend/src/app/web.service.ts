@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subject } from 'rxjs';
-import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -10,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class WebService {
 
-    BASE_URL = 'http://localhost:59561/api';
+    BASE_URL = 'http://localhost:8888/api';
 
     private contactsStore: any = [];
 
@@ -21,13 +20,12 @@ export class WebService {
     constructor(
         private http: HttpClient,
         private sb: MatSnackBar,
-        private auth: AuthService,
         private router: Router
     ) { }
 
     getContacts() {
         this.http
-            .get(`${this.BASE_URL}/contacts`, { headers: this.auth.tokenHeader })
+            .get(`${this.BASE_URL}/contacts`)
             .subscribe(
                 (res) => {
                     this.contactsStore = res;
@@ -39,12 +37,12 @@ export class WebService {
 
     getContactById(contactId) {
         return this.http
-            .get(`${this.BASE_URL}/contacts/${contactId}`, { headers: this.auth.tokenHeader })
+            .get(`${this.BASE_URL}/contacts/${contactId}`)
     }
 
     createContact(contact) {
         this.http
-            .post(`${this.BASE_URL}/contacts`, contact, { headers: this.auth.tokenHeader })
+            .post(`${this.BASE_URL}/contacts`, contact)
             .subscribe(
                 (res: any) => {
                     this.contactsStore.push(res);
@@ -57,7 +55,7 @@ export class WebService {
 
     updateContact(contact, contactId) {
         this.http
-            .put(`${this.BASE_URL}/contacts/${contactId}`, contact, { headers: this.auth.tokenHeader })
+            .put(`${this.BASE_URL}/contacts/${contactId}`, contact)
             .subscribe(
                 (res: any) => {
                     this.sb.open('contact was updated', 'close', { duration: 2000 });
@@ -68,7 +66,7 @@ export class WebService {
 
     removeContact(contactId) {
         this.http
-            .delete(`${this.BASE_URL}/contacts/${contactId}`, { headers: this.auth.tokenHeader })
+            .delete(`${this.BASE_URL}/contacts/${contactId}`)
             .subscribe(
                 (res: any) => {
                     this.contactsStore = this.contactsStore.filter( contact => contact.id !== contactId);
@@ -76,19 +74,6 @@ export class WebService {
                     this.sb.open('contact was deleted', 'close', { duration: 2000 });
                 },
                 () => this.sb.open('unable to delete contact', 'close', { duration: 2000 })
-            );
-    }
-
-    getUser() {
-        return this.http.get(`${this.BASE_URL}/users/me`, { headers: this.auth.tokenHeader });
-    }
-
-    updateUser(user) {
-        return this.http.post(`${this.BASE_URL}/users/me`, user, { headers: this.auth.tokenHeader })
-            .subscribe(
-                (res: any) => {
-                    localStorage.setItem(this.auth.NAME_KEY, res.userName);
-                }
             );
     }
 }

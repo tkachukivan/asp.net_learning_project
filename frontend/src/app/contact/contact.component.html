@@ -15,14 +15,14 @@
                 >
         </mat-form-field>
 
-        <mat-form-field>
+        <!-- <mat-form-field>
             <input
                 matInput
                 placeholder="Middle Name"
                 type="text"
                 formControlName="middleName"
                 >
-        </mat-form-field>
+        </mat-form-field> -->
         
         <mat-form-field>
             <input
@@ -52,7 +52,7 @@
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
-        <div formArrayName="phones">
+        <!-- <div formArrayName="phones">
             <mat-card-title style="display: flex; justify-content: space-between;">
                 Phones
 
@@ -133,7 +133,7 @@
                     formControlName="zipCode"
                     type="text">
             </mat-form-field>
-        </div>
+        </div> -->
 
         <button mat-raised-button color="primary">{{ isContactNew ? "Create" : "Update" }} Contact</button>
     </form>

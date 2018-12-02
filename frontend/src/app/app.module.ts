@@ -24,9 +24,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user/user.component';
 import { ContactsListComponent } from './contacts-list/contacts-list.component';
 import { ContactComponent } from './contact/contact.component';
 
@@ -34,18 +31,6 @@ const routes = [
   {
     path: '',
     component: HomeComponent,
-  },
-  {
-    path: 'register',
-    component: RegisterComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'user',
-    component: UserComponent
   },
   {
     path: 'contact/new',
@@ -62,9 +47,6 @@ const routes = [
     AppComponent,
     NavComponent,
     HomeComponent,
-    RegisterComponent,
-    LoginComponent,
-    UserComponent,
     ContactsListComponent,
     ContactComponent,
   ],
