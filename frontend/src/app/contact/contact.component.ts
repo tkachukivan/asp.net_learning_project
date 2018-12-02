@@ -41,7 +41,6 @@ export class ContactComponent implements OnInit {
     createForm({
         firstName = '',
         lastName = '',
-        middleName = '',
         email = '',
         birthdate = '',
     }: any) {
@@ -67,7 +66,6 @@ export class ContactComponent implements OnInit {
         this.form = this.fb.group({
             firstName: [firstName, Validators.required],
             lastName: [lastName, Validators.required],
-            // middleName: middleName,
             email: [email, [Validators.required]],
             // address: addressFormGroup,
             birthdate: birthdate,

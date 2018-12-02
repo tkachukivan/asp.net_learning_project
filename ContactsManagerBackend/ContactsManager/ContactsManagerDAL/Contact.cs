@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 
 namespace ContactsManagerDAL
 {
@@ -9,5 +10,14 @@ namespace ContactsManagerDAL
         public string LastName { get; set; }
         public string Email { get; set; }
         public DateTime Birthdate { get; set; }
+
+        public void LoadDataFromReader(SqlDataReader reader)
+        {
+            Id = Guid.Parse(reader["Id"].ToString());
+            FirstName = reader["FirstName"].ToString();
+            LastName = reader["LastName"].ToString();
+            Email = reader["Email"].ToString();
+            Birthdate = Convert.ToDateTime(reader["Birthdate"].ToString());
+        }
     }
 }
