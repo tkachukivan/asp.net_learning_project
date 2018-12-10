@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace ContactsManagerDAL
@@ -14,9 +15,9 @@ namespace ContactsManagerDAL
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 cmd.CommandText = "getContacts";
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 if (reader.HasRows)
                 {
@@ -34,21 +35,25 @@ namespace ContactsManagerDAL
             return Contacts;
         }
 
-        public Contact GetContactById(Guid Id)
+        public Contact GetContact(Guid Id)
         {
+            if (Id == null)
+            {
+                throw new ArgumentException();
+            }
+
             var contact = new Contact();
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 cmd.CommandText = "getContactById";
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                var idParameter = new SqlParameter("Id", System.Data.SqlDbType.UniqueIdentifier);
-                idParameter.Value = Id;
-                cmd.Parameters.Add(idParameter);
+                cmd.Parameters.Add("Id", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["Id"].Value = Id;
 
-                var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 if (reader.Read())
                 {
@@ -65,6 +70,17 @@ namespace ContactsManagerDAL
 
         public Contact CreateContact(Contact contact)
         {
+            if (
+                contact == null ||
+                contact.FirstName == null ||
+                contact.LastName == null ||
+                contact.Email == null ||
+                contact.Birthdate == null
+                )
+            {
+                throw new ArgumentException();
+            }
+
             var createdContact = new Contact();
             contact.Id = Guid.NewGuid();
 
@@ -72,29 +88,24 @@ namespace ContactsManagerDAL
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 cmd.CommandText = "createContact";
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                var idParam = new SqlParameter("Id", System.Data.SqlDbType.UniqueIdentifier);
-                idParam.Value = contact.Id;
-                cmd.Parameters.Add(idParam);
+                cmd.Parameters.Add("Id", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["Id"].Value = contact.Id;
 
-                var firstNameParam = new SqlParameter("FirstName", System.Data.SqlDbType.NVarChar);
-                firstNameParam.Value = contact.FirstName;
-                cmd.Parameters.Add(firstNameParam);
+                cmd.Parameters.Add("FirstName", SqlDbType.NVarChar);
+                cmd.Parameters["FirstName"].Value = contact.FirstName;
 
-                var lastNameParam = new SqlParameter("LastName", System.Data.SqlDbType.NVarChar);
-                lastNameParam.Value = contact.LastName;
-                cmd.Parameters.Add(lastNameParam);
+                cmd.Parameters.Add("LastName", SqlDbType.NVarChar);
+                cmd.Parameters["LastName"].Value = contact.LastName;
 
-                var emailParam = new SqlParameter("Email", System.Data.SqlDbType.NVarChar);
-                emailParam.Value = contact.Email;
-                cmd.Parameters.Add(emailParam);
+                cmd.Parameters.Add("Email", SqlDbType.NVarChar);
+                cmd.Parameters["Email"].Value = contact.Email;
 
-                var birthdateParam = new SqlParameter("Birthdate", System.Data.SqlDbType.DateTime);
-                birthdateParam.Value = contact.Birthdate;
-                cmd.Parameters.Add(birthdateParam);
+                cmd.Parameters.Add("Birthdate", SqlDbType.DateTime);
+                cmd.Parameters["Birthdate"].Value = contact.Birthdate;
 
-                var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 if (reader.Read())
                 {
@@ -107,35 +118,41 @@ namespace ContactsManagerDAL
 
         public Contact UpdateContact(Guid Id, Contact contact)
         {
+            if (
+                Id == null ||
+                contact == null ||
+                contact.FirstName == null ||
+                contact.LastName == null ||
+                contact.Email == null
+                )
+            {
+                throw new ArgumentException();
+            }
+
             var updatedContact = new Contact();
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 cmd.CommandText = "updateContactById";
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                var idParam = new SqlParameter("Id", System.Data.SqlDbType.UniqueIdentifier);
-                idParam.Value = Id;
-                cmd.Parameters.Add(idParam);
+                cmd.Parameters.Add("Id", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["Id"].Value = Id;
 
-                var firstNameParam = new SqlParameter("FirstName", System.Data.SqlDbType.NVarChar);
-                firstNameParam.Value = contact.FirstName;
-                cmd.Parameters.Add(firstNameParam);
+                cmd.Parameters.Add("FirstName", SqlDbType.NVarChar);
+                cmd.Parameters["FirstName"].Value = contact.FirstName;
 
-                var lastNameParam = new SqlParameter("LastName", System.Data.SqlDbType.NVarChar);
-                lastNameParam.Value = contact.LastName;
-                cmd.Parameters.Add(lastNameParam);
+                cmd.Parameters.Add("LastName", SqlDbType.NVarChar);
+                cmd.Parameters["LastName"].Value = contact.LastName;
 
-                var emailParam = new SqlParameter("Email", System.Data.SqlDbType.NVarChar);
-                emailParam.Value = contact.Email;
-                cmd.Parameters.Add(emailParam);
+                cmd.Parameters.Add("Email", SqlDbType.NVarChar);
+                cmd.Parameters["Email"].Value = contact.Email;
 
-                var birthdateParam = new SqlParameter("Birthdate", System.Data.SqlDbType.DateTime);
-                birthdateParam.Value = contact.Birthdate;
-                cmd.Parameters.Add(birthdateParam);
+                cmd.Parameters.Add("Birthdate", SqlDbType.DateTime);
+                cmd.Parameters["Birthdate"].Value = contact.Birthdate;
 
-                var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 if (reader.Read())
                 {
@@ -146,17 +163,21 @@ namespace ContactsManagerDAL
             return updatedContact;
         }
 
-        public void RemoveContact(Guid id)
+        public void RemoveContact(Guid Id)
         {
+            if (Id == null)
+            {
+                throw new ArgumentException();
+            }
+
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 cmd.CommandText = "removeContactById";
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                var contactId = new SqlParameter("Id", System.Data.SqlDbType.UniqueIdentifier);
-                contactId.Value = id;
-                cmd.Parameters.Add(contactId);
+                cmd.Parameters.Add("Id", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["Id"].Value = Id;
 
                 cmd.ExecuteNonQuery();
             }

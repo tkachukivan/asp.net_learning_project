@@ -13,10 +13,21 @@ namespace ContactsManagerBL
 
         public List<Contact> GetContacts() => Mapper.Map<List<Contact>>(ContactsProvider.GetContacts());
 
-        public Contact GetContactById(Guid Id) => Mapper.Map<Contact>(ContactsProvider.GetContactById(Id));
+        public Contact GetContact(Guid Id) => Mapper.Map<Contact>(ContactsProvider.GetContact(Id));
 
         public Contact CreateContact(Contact contact)
         {
+            if (
+                contact == null ||
+                contact.FirstName == null ||
+                contact.LastName == null ||
+                contact.Email == null ||
+                contact.Birthdate == null
+                )
+            {
+                throw new ArgumentException();
+            }
+
             var createdContact = ContactsProvider.CreateContact(Mapper.Map<ContactDAL>(contact));
 
             return Mapper.Map<Contact>(createdContact);
@@ -24,6 +35,17 @@ namespace ContactsManagerBL
 
         public Contact UpdateContact(Guid Id, Contact contact)
         {
+            if (
+                contact == null ||
+                contact.FirstName == null ||
+                contact.LastName == null ||
+                contact.Email == null ||
+                contact.Birthdate == null
+                )
+            {
+                throw new ArgumentException();
+            }
+
             var updatedContact = ContactsProvider.UpdateContact(Id, Mapper.Map<ContactDAL>(contact));
 
             return Mapper.Map<Contact>(updatedContact);

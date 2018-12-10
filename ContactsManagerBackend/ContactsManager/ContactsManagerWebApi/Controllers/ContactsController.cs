@@ -19,7 +19,7 @@ namespace ContactsManagerWebApi.Controllers
 
         public IHttpActionResult Get(Guid Id)
         {
-            var contact = ContactsManager.GetContactById(Id);
+            var contact = ContactsManager.GetContact(Id);
 
             if(contact == null)
             {
@@ -35,10 +35,11 @@ namespace ContactsManagerWebApi.Controllers
         public IHttpActionResult Post([FromBody] Contact contact)
         {
             if (
-                String.IsNullOrEmpty(contact.FirstName) ||
-                String.IsNullOrEmpty(contact.LastName) ||
-                String.IsNullOrEmpty(contact.Email) ||
-                String.IsNullOrEmpty(contact.Birthdate.ToString())
+                contact == null ||
+                contact.FirstName == null ||
+                contact.LastName == null ||
+                contact.Email == null ||
+                contact.Birthdate == null
                 )
             {
                 return BadRequest();
@@ -53,10 +54,11 @@ namespace ContactsManagerWebApi.Controllers
         public IHttpActionResult Put(Guid Id, [FromBody] Contact contact)
         {
             if (
-                String.IsNullOrEmpty(contact.FirstName) ||
-                String.IsNullOrEmpty(contact.LastName) ||
-                String.IsNullOrEmpty(contact.Email) ||
-                String.IsNullOrEmpty(contact.Birthdate.ToString())
+                contact == null ||
+                contact.FirstName == null ||
+                contact.LastName == null ||
+                contact.Email == null ||
+                contact.Birthdate == null
                 )
             {
                 return BadRequest();
