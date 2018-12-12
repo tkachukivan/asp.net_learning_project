@@ -13,11 +13,11 @@ namespace ContactsManagerDAL
 
         public void LoadDataFromReader(SqlDataReader reader)
         {
-            Id = Guid.Parse(reader["Id"].ToString());
-            FirstName = reader["FirstName"].ToString();
-            LastName = reader["LastName"].ToString();
-            Email = reader["Email"].ToString();
-            Birthdate = Convert.ToDateTime(reader["Birthdate"].ToString());
+            Id = (Guid)reader["Id"];
+            FirstName = (string)reader["FirstName"];
+            LastName = (string)reader["LastName"];
+            Email = (string)reader["Email"];
+            Birthdate = (DateTime)reader["Birthdate"];
         }
     }
 }
