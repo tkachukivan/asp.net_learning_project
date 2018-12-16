@@ -17,7 +17,12 @@ namespace ContactsManagerDAL
             FirstName = (string)reader["FirstName"];
             LastName = (string)reader["LastName"];
             Email = (string)reader["Email"];
-            Birthdate = (DateTime)reader["Birthdate"];
+
+            var col = reader.GetOrdinal("Birthdate");
+
+            Birthdate = reader.IsDBNull(col) ?
+                        (DateTime?)null :
+                        (DateTime?)reader["Birthdate"];
         }
     }
 }

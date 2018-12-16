@@ -21,11 +21,10 @@ namespace ContactsManagerBL
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null ||
-                contact.Birthdate == null
+                contact.Email == null
                 )
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException();
             }
 
             var createdContact = ContactsProvider.CreateContact(Mapper.Map<ContactDAL>(contact));
@@ -39,11 +38,10 @@ namespace ContactsManagerBL
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null ||
-                contact.Birthdate == null
+                contact.Email == null
                 )
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException();
             }
 
             var updatedContact = ContactsProvider.UpdateContact(Id, Mapper.Map<ContactDAL>(contact));

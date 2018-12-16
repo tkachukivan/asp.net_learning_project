@@ -38,8 +38,7 @@ namespace ContactsManagerWebApi.Controllers
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null ||
-                contact.Birthdate == null
+                contact.Email == null
                 )
             {
                 return BadRequest();
@@ -57,8 +56,7 @@ namespace ContactsManagerWebApi.Controllers
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null ||
-                contact.Birthdate == null
+                contact.Email == null
                 )
             {
                 return BadRequest();
