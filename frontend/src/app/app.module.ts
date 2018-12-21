@@ -17,6 +17,8 @@ import {
   MatSelectModule,
 } from '@angular/material';
 
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+
 import { AppComponent } from './app.component';
 
 import { WebService } from './web.service';
@@ -67,10 +69,12 @@ const routes = [
     MatIconModule,
     MatOptionModule,
     MatSelectModule,
+    MatMomentDateModule,
   ],
   providers: [
     WebService,
-    MatIconRegistry
+    MatIconRegistry,
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
   ],
   bootstrap: [AppComponent]
 })

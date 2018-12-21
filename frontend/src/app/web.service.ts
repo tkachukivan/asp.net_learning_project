@@ -47,7 +47,7 @@ export class WebService {
                 (res: any) => {
                     this.contactsStore.push(res);
                     this.sb.open('contact was created', 'close', { duration: 2000 });
-                    this.router.navigate(['/contact', res.id]);
+                    this.router.navigate(['/']);
                 },
                 () => this.sb.open('unable to create contacts', 'close', { duration: 2000 })
             );
