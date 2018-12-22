@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using ContactsManagerDAL.Models;
 
 namespace ContactsManagerDAL
 {
@@ -53,6 +54,8 @@ namespace ContactsManagerDAL
                 if (reader.Read())
                 {
                     contact.LoadDataFromReader(reader);
+                    contact.Address = new Address();
+                    contact.Address.LoadDataFromReader(reader);
                 }
                 else
                 {
@@ -69,7 +72,11 @@ namespace ContactsManagerDAL
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null
+                contact.Email == null ||
+                contact.Address == null ||
+                contact.Address.Country == null ||
+                contact.Address.City == null ||
+                contact.Address.Street == null
                 )
             {
                 throw new ArgumentNullException();
@@ -77,6 +84,7 @@ namespace ContactsManagerDAL
 
             var createdContact = new Contact();
             contact.Id = Guid.NewGuid();
+            contact.Address.Id = Guid.NewGuid();
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
@@ -92,9 +100,32 @@ namespace ContactsManagerDAL
 
                 cmd.Parameters.AddNewParameter("Email", SqlDbType.NVarChar, contact.Email);
 
+                cmd.Parameters.AddNewParameter("AddressId", SqlDbType.UniqueIdentifier, contact.Address.Id);
+
+                cmd.Parameters.AddNewParameter("Country", SqlDbType.NVarChar, contact.Address.Country);
+
+                cmd.Parameters.AddNewParameter("City", SqlDbType.NVarChar, contact.Address.City);
+
+                cmd.Parameters.AddNewParameter("Street", SqlDbType.NVarChar, contact.Address.Street);
+
                 if (contact.Birthdate != null)
                 {
                     cmd.Parameters.AddNewParameter("Birthdate", SqlDbType.DateTime, contact.Birthdate);
+                }
+
+                if (contact.Address.Building != null)
+                {
+                    cmd.Parameters.AddNewParameter("Building", SqlDbType.NVarChar, contact.Address.Building);
+                }
+
+                if (contact.Address.Appartments != null)
+                {
+                    cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartments);
+                }
+
+                if (contact.Address.ZipCode != null)
+                {
+                    cmd.Parameters.AddNewParameter("ZipCode", SqlDbType.NVarChar, contact.Address.ZipCode);
                 }
 
                 var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -102,6 +133,9 @@ namespace ContactsManagerDAL
                 if (reader.Read())
                 {
                     createdContact.LoadDataFromReader(reader);
+
+                    createdContact.Address = new Address();
+                    createdContact.Address.LoadDataFromReader(reader);
                 }
             }
 
@@ -115,7 +149,11 @@ namespace ContactsManagerDAL
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null
+                contact.Email == null ||
+                contact.Address == null ||
+                contact.Address.Country == null ||
+                contact.Address.City == null ||
+                contact.Address.Street == null
                 )
             {
                 throw new ArgumentNullException();
@@ -137,9 +175,32 @@ namespace ContactsManagerDAL
                 
                 cmd.Parameters.AddNewParameter("Email", SqlDbType.NVarChar, contact.Email);
 
+                cmd.Parameters.AddNewParameter("AddressId", SqlDbType.UniqueIdentifier, contact.Address.Id);
+
+                cmd.Parameters.AddNewParameter("Country", SqlDbType.NVarChar, contact.Address.Country);
+
+                cmd.Parameters.AddNewParameter("City", SqlDbType.NVarChar, contact.Address.City);
+
+                cmd.Parameters.AddNewParameter("Street", SqlDbType.NVarChar, contact.Address.Street);
+
                 if (contact.Birthdate != null)
                 {
                     cmd.Parameters.AddNewParameter("Birthdate", SqlDbType.DateTime, contact.Birthdate);
+                }
+
+                if (contact.Address.Building != null)
+                {
+                    cmd.Parameters.AddNewParameter("Building", SqlDbType.NVarChar, contact.Address.Building);
+                }
+
+                if (contact.Address.Appartments != null)
+                {
+                    cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartments);
+                }
+
+                if (contact.Address.ZipCode != null)
+                {
+                    cmd.Parameters.AddNewParameter("ZipCode", SqlDbType.NVarChar, contact.Address.ZipCode);
                 }
 
                 var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -147,6 +208,9 @@ namespace ContactsManagerDAL
                 if (reader.Read())
                 {
                     updatedContact.LoadDataFromReader(reader);
+
+                    updatedContact.Address = new Address();
+                    updatedContact.Address.LoadDataFromReader(reader);
                 }
             }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ContactsManagerWebApi
+namespace ContactsManagerWebApi.Models
 {
     public class Contact
     {
@@ -8,6 +8,7 @@ namespace ContactsManagerWebApi
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public Address Address { get; set; }
         public DateTime? Birthdate { get; set; }
     }
 }

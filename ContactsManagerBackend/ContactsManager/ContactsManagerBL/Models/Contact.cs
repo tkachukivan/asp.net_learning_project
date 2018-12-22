@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ContactsManagerBL
+namespace ContactsManagerBL.Models
 {
     public class Contact
     {
@@ -8,6 +8,7 @@ namespace ContactsManagerBL
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public Address Address { get; set; }
         public DateTime? Birthdate { get; set; }
     }
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Web.Http;
 using AutoMapper;
 using ContactsManagerBL;
-using ContactBL = ContactsManagerBL.Contact;
+using ContactsManagerWebApi.Models;
+using ContactBL = ContactsManagerBL.Models.Contact;
 
 namespace ContactsManagerWebApi.Controllers
 {
@@ -38,7 +39,11 @@ namespace ContactsManagerWebApi.Controllers
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null
+                contact.Email == null ||
+                contact.Address == null ||
+                contact.Address.Country == null ||
+                contact.Address.City == null ||
+                contact.Address.Street == null
                 )
             {
                 return BadRequest();
@@ -56,7 +61,11 @@ namespace ContactsManagerWebApi.Controllers
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null
+                contact.Email == null ||
+                contact.Address == null ||
+                contact.Address.Country == null ||
+                contact.Address.City == null ||
+                contact.Address.Street == null
                 )
             {
                 return BadRequest();

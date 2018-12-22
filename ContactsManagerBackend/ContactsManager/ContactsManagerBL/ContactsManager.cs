@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using ContactsManagerBL.Models;
 using ContactsManagerDAL;
-using ContactDAL = ContactsManagerDAL.Contact;
+using ContactDAL = ContactsManagerDAL.Models.Contact;
 
 
 namespace ContactsManagerBL
@@ -21,7 +22,11 @@ namespace ContactsManagerBL
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null
+                contact.Email == null ||
+                contact.Address == null ||
+                contact.Address.Country == null ||
+                contact.Address.City == null ||
+                contact.Address.Street == null
                 )
             {
                 throw new ArgumentNullException();
@@ -38,7 +43,11 @@ namespace ContactsManagerBL
                 contact == null ||
                 contact.FirstName == null ||
                 contact.LastName == null ||
-                contact.Email == null
+                contact.Email == null ||
+                contact.Address == null ||
+                contact.Address.Country == null ||
+                contact.Address.City == null ||
+                contact.Address.Street == null
                 )
             {
                 throw new ArgumentNullException();
