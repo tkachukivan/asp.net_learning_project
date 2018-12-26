@@ -1,7 +1,7 @@
 <mat-card>
     <mat-card-title>Your Contacts</mat-card-title>
 
-    <div *ngFor="let contact of webService.contacts | async">
+    <div *ngFor="let contact of contactsService.contacts | async">
         <mat-card style="margin: 8px">
             <mat-card-title [routerLink]="['/contact', contact.id]" style="cursor: pointer;">
                 {{contact.firstName}} {{contact.lastName}}

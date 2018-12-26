@@ -3,19 +3,20 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { Contact } from '../models/contact.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class WebService {
+export class ContactsService {
 
-    BASE_URL = 'http://localhost:8888/api';
+    private BASE_URL: string = 'http://localhost:8888/api';
 
-    private contactsStore: any = [];
+    private contactsStore: Array<Contact> = [];
 
-    private contactsSubject = new Subject();
+    private contactsSubject: Subject<Contact[]> = new Subject();
 
-    contacts = this.contactsSubject.asObservable();
+    public contacts = this.contactsSubject.asObservable();
 
     constructor(
         private http: HttpClient,
@@ -27,7 +28,7 @@ export class WebService {
         this.http
             .get(`${this.BASE_URL}/contacts`)
             .subscribe(
-                (res) => {
+                (res: Array<Contact>) => {
                     this.contactsStore = res;
                     this.contactsSubject.next(this.contactsStore);
                 },
@@ -35,17 +36,16 @@ export class WebService {
             );
     }
 
-    getContactById(contactId) {
+    getContactById(contactId: string) {
         return this.http
             .get(`${this.BASE_URL}/contacts/${contactId}`)
     }
 
-    createContact(contact) {
+    createContact(contact: Contact) {
         this.http
             .post(`${this.BASE_URL}/contacts`, contact)
             .subscribe(
                 (res: any) => {
-                    this.contactsStore.push(res);
                     this.sb.open('contact was created', 'close', { duration: 2000 });
                     this.router.navigate(['/']);
                 },
@@ -53,7 +53,7 @@ export class WebService {
             );
     }
 
-    updateContact(contact, contactId) {
+    updateContact(contact: Contact, contactId: string) {
         this.http
             .put(`${this.BASE_URL}/contacts/${contactId}`, contact)
             .subscribe(
@@ -64,11 +64,11 @@ export class WebService {
             );
     }
 
-    removeContact(contactId) {
+    removeContact(contactId: string) {
         this.http
             .delete(`${this.BASE_URL}/contacts/${contactId}`)
             .subscribe(
-                (res: any) => {
+                () => {
                     this.contactsStore = this.contactsStore.filter( contact => contact.id !== contactId);
                     this.contactsSubject.next(this.contactsStore);
                     this.sb.open('contact was deleted', 'close', { duration: 2000 });

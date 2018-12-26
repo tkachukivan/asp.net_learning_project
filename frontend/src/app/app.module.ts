@@ -21,7 +21,7 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
 
 import { AppComponent } from './app.component';
 
-import { WebService } from './web.service';
+import { ContactsService } from './services/contacts.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav/nav.component';
@@ -72,7 +72,7 @@ const routes = [
     MatMomentDateModule,
   ],
   providers: [
-    WebService,
+    ContactsService,
     MatIconRegistry,
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
   ],

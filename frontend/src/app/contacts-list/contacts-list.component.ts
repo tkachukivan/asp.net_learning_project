@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WebService } from '../web.service';
+import { ContactsService } from '../services/contacts.service';
 
 @Component({
   selector: 'app-contacts-list',
@@ -8,14 +8,14 @@ import { WebService } from '../web.service';
 export class ContactsListComponent implements OnInit {
 
   constructor(
-    private webService: WebService
+    private contactsService: ContactsService
   ) {}
 
   ngOnInit() {
-    this.webService.getContacts();
+    this.contactsService.getContacts();
   }
 
-  removeContact(contactId) {
-    this.webService.removeContact(contactId);
+  removeContact(contactId: string) {
+    this.contactsService.removeContact(contactId);
   }
 }
