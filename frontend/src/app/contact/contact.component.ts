@@ -47,9 +47,9 @@ export class ContactComponent implements OnInit {
     }: any) {
         // const phonesArray = new FormArray([]);
         const addressFormGroup = new FormGroup({
-            country: new FormControl(address.country || '', Validators.required),
-            city: new FormControl(address.city || '', Validators.required),
-            street: new FormControl(address.street || '', Validators.required),
+            country: new FormControl(address.country || ''),
+            city: new FormControl(address.city || ''),
+            street: new FormControl(address.street || ''),
             building: new FormControl(address.building || ''),
             appartments: new FormControl(address.appartments || ''),
             zipCode: new FormControl(address.zipCode || ''),
@@ -67,7 +67,7 @@ export class ContactComponent implements OnInit {
         this.form = this.fb.group({
             firstName: [firstName, Validators.required],
             lastName: [lastName, Validators.required],
-            email: [email, [Validators.required]],
+            email: [email],
             address: addressFormGroup,
             birthdate: birthdate,
             // phones: phonesArray,

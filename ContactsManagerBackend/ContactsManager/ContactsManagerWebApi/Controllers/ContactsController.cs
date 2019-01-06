@@ -38,12 +38,7 @@ namespace ContactsManagerWebApi.Controllers
             if (
                 contact == null ||
                 contact.FirstName == null ||
-                contact.LastName == null ||
-                contact.Email == null ||
-                contact.Address == null ||
-                contact.Address.Country == null ||
-                contact.Address.City == null ||
-                contact.Address.Street == null
+                contact.LastName == null
                 )
             {
                 return BadRequest();
@@ -60,12 +55,7 @@ namespace ContactsManagerWebApi.Controllers
             if (
                 contact == null ||
                 contact.FirstName == null ||
-                contact.LastName == null ||
-                contact.Email == null ||
-                contact.Address == null ||
-                contact.Address.Country == null ||
-                contact.Address.City == null ||
-                contact.Address.Street == null
+                contact.LastName == null
                 )
             {
                 return BadRequest();

@@ -71,12 +71,7 @@ namespace ContactsManagerDAL
             if (
                 contact == null ||
                 contact.FirstName == null ||
-                contact.LastName == null ||
-                contact.Email == null ||
-                contact.Address == null ||
-                contact.Address.Country == null ||
-                contact.Address.City == null ||
-                contact.Address.Street == null
+                contact.LastName == null
                 )
             {
                 throw new ArgumentNullException();
@@ -84,7 +79,6 @@ namespace ContactsManagerDAL
 
             var createdContact = new Contact();
             contact.Id = Guid.NewGuid();
-            contact.Address.Id = Guid.NewGuid();
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
@@ -100,32 +94,46 @@ namespace ContactsManagerDAL
 
                 cmd.Parameters.AddNewParameter("Email", SqlDbType.NVarChar, contact.Email);
 
-                cmd.Parameters.AddNewParameter("AddressId", SqlDbType.UniqueIdentifier, contact.Address.Id);
-
-                cmd.Parameters.AddNewParameter("Country", SqlDbType.NVarChar, contact.Address.Country);
-
-                cmd.Parameters.AddNewParameter("City", SqlDbType.NVarChar, contact.Address.City);
-
-                cmd.Parameters.AddNewParameter("Street", SqlDbType.NVarChar, contact.Address.Street);
-
                 if (contact.Birthdate != null)
                 {
                     cmd.Parameters.AddNewParameter("Birthdate", SqlDbType.DateTime, contact.Birthdate);
                 }
 
-                if (contact.Address.Building != null)
+                if (contact.Address != null)
                 {
-                    cmd.Parameters.AddNewParameter("Building", SqlDbType.NVarChar, contact.Address.Building);
-                }
+                    contact.Address.Id = Guid.NewGuid();
 
-                if (contact.Address.Appartments != null)
-                {
-                    cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartments);
-                }
+                    cmd.Parameters.AddNewParameter("AddressId", SqlDbType.UniqueIdentifier, contact.Address.Id);
 
-                if (contact.Address.ZipCode != null)
-                {
-                    cmd.Parameters.AddNewParameter("ZipCode", SqlDbType.NVarChar, contact.Address.ZipCode);
+                    if (contact.Address.Country != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Country", SqlDbType.NVarChar, contact.Address.Country);
+                    }
+
+                    if (contact.Address.City != null)
+                    {
+                        cmd.Parameters.AddNewParameter("City", SqlDbType.NVarChar, contact.Address.City);
+                    }
+
+                    if (contact.Address.Street != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Street", SqlDbType.NVarChar, contact.Address.Street);
+                    }
+
+                    if (contact.Address.Building != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Building", SqlDbType.NVarChar, contact.Address.Building);
+                    }
+
+                    if (contact.Address.Appartment != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartment);
+                    }
+
+                    if (contact.Address.ZipCode != null)
+                    {
+                        cmd.Parameters.AddNewParameter("ZipCode", SqlDbType.NVarChar, contact.Address.ZipCode);
+                    }
                 }
 
                 var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -148,12 +156,7 @@ namespace ContactsManagerDAL
                 Id == null ||
                 contact == null ||
                 contact.FirstName == null ||
-                contact.LastName == null ||
-                contact.Email == null ||
-                contact.Address == null ||
-                contact.Address.Country == null ||
-                contact.Address.City == null ||
-                contact.Address.Street == null
+                contact.LastName == null
                 )
             {
                 throw new ArgumentNullException();
@@ -175,32 +178,49 @@ namespace ContactsManagerDAL
                 
                 cmd.Parameters.AddNewParameter("Email", SqlDbType.NVarChar, contact.Email);
 
-                cmd.Parameters.AddNewParameter("AddressId", SqlDbType.UniqueIdentifier, contact.Address.Id);
-
-                cmd.Parameters.AddNewParameter("Country", SqlDbType.NVarChar, contact.Address.Country);
-
-                cmd.Parameters.AddNewParameter("City", SqlDbType.NVarChar, contact.Address.City);
-
-                cmd.Parameters.AddNewParameter("Street", SqlDbType.NVarChar, contact.Address.Street);
-
                 if (contact.Birthdate != null)
                 {
                     cmd.Parameters.AddNewParameter("Birthdate", SqlDbType.DateTime, contact.Birthdate);
                 }
 
-                if (contact.Address.Building != null)
+                if (contact.Address != null)
                 {
-                    cmd.Parameters.AddNewParameter("Building", SqlDbType.NVarChar, contact.Address.Building);
-                }
+                    if (contact.Address.Id == null)
+                    {
+                        contact.Address.Id = Guid.NewGuid();
+                    }
 
-                if (contact.Address.Appartments != null)
-                {
-                    cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartments);
-                }
+                    cmd.Parameters.AddNewParameter("AddressId", SqlDbType.UniqueIdentifier, contact.Address.Id);
 
-                if (contact.Address.ZipCode != null)
-                {
-                    cmd.Parameters.AddNewParameter("ZipCode", SqlDbType.NVarChar, contact.Address.ZipCode);
+                    if (contact.Address.Country != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Country", SqlDbType.NVarChar, contact.Address.Country);
+                    }
+
+                    if (contact.Address.City != null)
+                    {
+                        cmd.Parameters.AddNewParameter("City", SqlDbType.NVarChar, contact.Address.City);
+                    }
+
+                    if (contact.Address.Street != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Street", SqlDbType.NVarChar, contact.Address.Street);
+                    }
+
+                    if (contact.Address.Building != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Building", SqlDbType.NVarChar, contact.Address.Building);
+                    }
+
+                    if (contact.Address.Appartment != null)
+                    {
+                        cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartment);
+                    }
+
+                    if (contact.Address.ZipCode != null)
+                    {
+                        cmd.Parameters.AddNewParameter("ZipCode", SqlDbType.NVarChar, contact.Address.ZipCode);
+                    }
                 }
 
                 var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
