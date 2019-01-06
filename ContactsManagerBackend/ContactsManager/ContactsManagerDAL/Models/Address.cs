@@ -10,7 +10,7 @@ namespace ContactsManagerDAL.Models
         public string City { get; set; }
         public string Street { get; set; }
         public string Building { get; set; }
-        public string Appartments { get; set; }
+        public string Appartment { get; set; }
         public string ZipCode { get; set; }
 
         public void LoadDataFromReader(SqlDataReader reader)
@@ -20,7 +20,7 @@ namespace ContactsManagerDAL.Models
             City = (string)reader["City"];
             Street = (string)reader["Street"];
             Building = reader["Building"].GetType() != typeof(DBNull) ? (string)reader["Building"] : "";
-            Appartments = reader["Appartments"].GetType() != typeof(DBNull) ? (string)reader["Appartments"] : "";
+            Appartment = reader["Appartment"].GetType() != typeof(DBNull) ? (string)reader["Appartment"] : "";
             ZipCode = reader["ZipCode"].GetType() != typeof(DBNull) ? (string)reader["ZipCode"] : "";
         }
     }

@@ -32,7 +32,6 @@
                 placeholder="Email"
                 [(ngModel)]="contact.email"
                 name="email"
-                required
                 type="email">
         </mat-form-field>
 
@@ -94,7 +93,6 @@
                     placeholder="Country"
                     [(ngModel)]="contact.address.country"
                     name="country"
-                    required
                     type="text">
             </mat-form-field>
 
@@ -104,7 +102,6 @@
                     placeholder="City"
                     [(ngModel)]="contact.address.city"
                     name="city"
-                    required
                     type="text">
             </mat-form-field>
 
@@ -114,7 +111,6 @@
                     placeholder="Street"
                     [(ngModel)]="contact.address.street"
                     name="street"
-                    required
                     type="text">
             </mat-form-field>
 
@@ -130,9 +126,8 @@
             <mat-form-field >
                 <input
                     matInput
-                    placeholder="Appartments"
-                    [(ngModel)]="contact.address.appartments"
-                    name="appartments"
+                    placeholder="Appartment"
+                    formControlName="appartment"
                     type="text">
             </mat-form-field>
 

@@ -14,7 +14,7 @@ namespace ContactsManagerBL.Models
         public string City { get; set; }
         public string Street { get; set; }
         public string Building { get; set; }
-        public string Appartments { get; set; }
+        public string Appartment { get; set; }
         public string ZipCode { get; set; }
     }
 }
