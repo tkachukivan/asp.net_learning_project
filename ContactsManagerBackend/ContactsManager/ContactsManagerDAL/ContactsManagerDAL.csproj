@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contact.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Contact.cs" />
     <Compile Include="ContactsProvider.cs" />
     <Compile Include="DBConnection.cs" />
     <Compile Include="DBExtentionsMethods.cs" />

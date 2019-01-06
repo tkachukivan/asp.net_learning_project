@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 
-namespace ContactsManagerDAL
+namespace ContactsManagerDAL.Models
 {
     public class Contact
     {
@@ -9,6 +9,7 @@ namespace ContactsManagerDAL
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public Address Address { get; set; }
         public DateTime? Birthdate { get; set; }
 
         public void LoadDataFromReader(SqlDataReader reader)

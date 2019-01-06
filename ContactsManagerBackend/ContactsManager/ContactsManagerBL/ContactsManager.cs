@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using ContactsManagerBL.Models;
 using ContactsManagerDAL;
-using ContactDAL = ContactsManagerDAL.Contact;
+using ContactDAL = ContactsManagerDAL.Models.Contact;
 
 
 namespace ContactsManagerBL
@@ -20,8 +21,7 @@ namespace ContactsManagerBL
             if (
                 contact == null ||
                 contact.FirstName == null ||
-                contact.LastName == null ||
-                contact.Email == null
+                contact.LastName == null
                 )
             {
                 throw new ArgumentNullException();
@@ -37,8 +37,7 @@ namespace ContactsManagerBL
             if (
                 contact == null ||
                 contact.FirstName == null ||
-                contact.LastName == null ||
-                contact.Email == null
+                contact.LastName == null 
                 )
             {
                 throw new ArgumentNullException();

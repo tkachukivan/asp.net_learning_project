@@ -43,16 +43,17 @@ export class ContactComponent implements OnInit {
         lastName = '',
         email = '',
         birthdate = '',
+        address = {},
     }: any) {
         // const phonesArray = new FormArray([]);
-        // const addressFormGroup = new FormGroup({
-        //     country: new FormControl(address.country || '', Validators.required),
-        //     city: new FormControl(address.city || '', Validators.required),
-        //     street: new FormControl(address.street || '', Validators.required),
-        //     building: new FormControl(address.building || '', Validators.required),
-        //     appartments: new FormControl(address.appartments || '', Validators.required),
-        //     zipCode: new FormControl(address.zipCode || '', Validators.required),
-        // })
+        const addressFormGroup = new FormGroup({
+            country: new FormControl(address.country || ''),
+            city: new FormControl(address.city || ''),
+            street: new FormControl(address.street || ''),
+            building: new FormControl(address.building || ''),
+            appartments: new FormControl(address.appartments || ''),
+            zipCode: new FormControl(address.zipCode || ''),
+        })
 
         // for (const phone of phones) {
         //     phonesArray.push(
@@ -66,8 +67,8 @@ export class ContactComponent implements OnInit {
         this.form = this.fb.group({
             firstName: [firstName, Validators.required],
             lastName: [lastName, Validators.required],
-            email: [email, [Validators.required]],
-            // address: addressFormGroup,
+            email: [email],
+            address: addressFormGroup,
             birthdate: birthdate,
             // phones: phonesArray,
         });
