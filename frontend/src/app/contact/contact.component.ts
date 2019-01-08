@@ -38,6 +38,10 @@ export class ContactComponent implements OnInit {
     }
 
     addNewPhone() {
+        if (!this.contact.phones) {
+            this.contact.phones = [];
+        }
+        
         this.contact.phones.push(new Phone());
     }
 

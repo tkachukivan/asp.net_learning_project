@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\Phone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

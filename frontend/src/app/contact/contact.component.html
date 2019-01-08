@@ -62,16 +62,25 @@
                     <mat-form-field >
                         <input
                             matInput
+                            placeholder="Country Code"
+                            [(ngModel)]="phone.number.countryCode"
+                            name="countryCode{{i}}"
+                            required
+                            type="text">
+                    </mat-form-field>
+                    <mat-form-field >
+                        <input
+                            matInput
                             placeholder="Phone Number"
-                            [(ngModel)]="phone.number"
-                            name="phone{{i}}"
+                            [(ngModel)]="phone.number.number"
+                            name="phoneNumber{{i}}"
                             required
                             type="text">
                     </mat-form-field>
     
                     <mat-form-field>
                         <mat-select placeholder="Phone Type"
-                                    [(ngModel)]="phone.type"
+                                    [(ngModel)]="phone.phoneType"
                                     name="phoneType{{i}}">
                             <mat-option *ngFor="let type of phoneTypes.values()" [value]="phoneTypes[type]">
                                 {{type}}
@@ -127,7 +136,8 @@
                 <input
                     matInput
                     placeholder="Appartment"
-                    formControlName="appartment"
+                    [(ngModel)]="contact.address.appartment"
+                    name="appartment"
                     type="text">
             </mat-form-field>
 

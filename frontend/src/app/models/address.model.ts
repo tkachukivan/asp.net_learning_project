@@ -4,6 +4,6 @@ export class Address {
     public city: string = '';
     public street: string = '';
     public building: string = '';
-    public appartments: string = '';
+    public appartment: string = '';
     public zipCode: string = '';
 }
