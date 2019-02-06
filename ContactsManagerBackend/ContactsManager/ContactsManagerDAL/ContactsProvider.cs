@@ -57,8 +57,6 @@ namespace ContactsManagerDAL
                     contact.LoadDataFromReader(reader);
                     contact.Address = new Address();
                     contact.Address.LoadDataFromReader(reader);
-                    contact.Phones = new List<Phone>();
-                    contact.Phones = LoadPhonesListFromReader(reader);
                 }
                 else
                 {
@@ -137,19 +135,6 @@ namespace ContactsManagerDAL
                     {
                         cmd.Parameters.AddNewParameter("ZipCode", SqlDbType.NVarChar, contact.Address.ZipCode);
                     }
-                }
-
-                if (contact.Phones != null && contact.Phones.Count > 0)
-                {
-                    var table = GetPhonesTable();
-
-                    foreach (Phone phone in contact.Phones)
-                    {
-                        phone.Id = Guid.NewGuid();
-                        table.Rows.Add(phone.Id, phone.Number.CountryCode, phone.Number.Number, phone.PhoneType);
-                    }
-
-                    cmd.Parameters.AddWithValue("PhonesTable", table);
                 }
 
                 var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -239,50 +224,6 @@ namespace ContactsManagerDAL
                     }
                 }
 
-                if (contact.Phones != null && contact.Phones.Count > 0)
-                {
-                    var phonesToCreate = contact.Phones.Where(p => p.IsNew).ToList();
-                    var phonesToDelete = contact.Phones.Where(p => p.Deleted).ToList();
-                    var phonesToUpdate = contact.Phones.Where(p => !p.Deleted && !p.IsNew).ToList();
-
-                    if (phonesToCreate.Count > 0)
-                    {
-                        var table = GetPhonesTable();
-
-                        foreach (Phone phone in phonesToCreate)
-                        {
-                            phone.Id = Guid.NewGuid();
-                            table.Rows.Add(phone.Id, phone.Number.CountryCode, phone.Number.Number, phone.PhoneType);
-                        }
-
-                        cmd.Parameters.AddWithValue("CreatePhonesTable", table);
-                    }
-
-                    if (phonesToUpdate.Count > 0)
-                    {
-                        var table = GetPhonesTable();
-
-                        foreach (Phone phone in phonesToUpdate)
-                        {
-                            table.Rows.Add(phone.Id, phone.Number.CountryCode, phone.Number.Number, phone.PhoneType);
-                        }
-
-                        cmd.Parameters.AddWithValue("UpdatePhonesTable", table);
-                    }
-
-                    if (phonesToDelete.Count > 0)
-                    {
-                        var table = GetPhonesTable();
-
-                        foreach (Phone phone in phonesToDelete)
-                        {
-                            table.Rows.Add(phone.Id);
-                        }
-
-                        cmd.Parameters.AddWithValue("DeletePhonesTable", table);
-                    }
-                }
-
                 var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 if (reader.Read())
@@ -309,36 +250,6 @@ namespace ContactsManagerDAL
 
                 cmd.ExecuteNonQuery();
             }
-        }
-
-        private List<Phone> LoadPhonesListFromReader(SqlDataReader reader)
-        {
-            var phones = new List<Phone>();
-
-            do
-            {
-                if (reader["PhoneId"].GetType() != typeof(DBNull))
-                {
-                    var phone = new Phone();
-                    phone.LoadDataFromReader(reader);
-
-                    phones.Add(phone);
-                }
-            } while (reader.Read());
-
-            return phones;
-        }
-
-        private DataTable GetPhonesTable()
-        {
-            var table = new DataTable();
-
-            table.Columns.Add(new DataColumn("Id", typeof(Guid)));
-            table.Columns.Add(new DataColumn("CountyCode", typeof(string)));
-            table.Columns.Add(new DataColumn("PhoneNumber", typeof(string)));
-            table.Columns.Add(new DataColumn("PhoneType", typeof(int)));
-
-            return table;
         }
     }
 }
