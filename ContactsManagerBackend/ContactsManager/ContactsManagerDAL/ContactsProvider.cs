@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using ContactsManagerDAL.Models;
+using System.Linq;
 
 namespace ContactsManagerDAL
 {
@@ -39,7 +40,7 @@ namespace ContactsManagerDAL
 
         public Contact GetContact(Guid Id)
         {
-            var contact = new Contact();
+            Contact contact = null;
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
@@ -53,13 +54,10 @@ namespace ContactsManagerDAL
 
                 if (reader.Read())
                 {
+                    contact = new Contact();
                     contact.LoadDataFromReader(reader);
                     contact.Address = new Address();
                     contact.Address.LoadDataFromReader(reader);
-                }
-                else
-                {
-                    contact = null;
                 }
             }
 
@@ -127,7 +125,7 @@ namespace ContactsManagerDAL
 
                     if (contact.Address.Appartment != null)
                     {
-                        cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartment);
+                        cmd.Parameters.AddNewParameter("Appartment", SqlDbType.NVarChar, contact.Address.Appartment);
                     }
 
                     if (contact.Address.ZipCode != null)
@@ -214,7 +212,7 @@ namespace ContactsManagerDAL
 
                     if (contact.Address.Appartment != null)
                     {
-                        cmd.Parameters.AddNewParameter("Appartments", SqlDbType.NVarChar, contact.Address.Appartment);
+                        cmd.Parameters.AddNewParameter("Appartment", SqlDbType.NVarChar, contact.Address.Appartment);
                     }
 
                     if (contact.Address.ZipCode != null)

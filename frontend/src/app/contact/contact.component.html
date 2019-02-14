@@ -1,7 +1,6 @@
 <mat-card>
     <form
-        *ngIf="form"
-        [formGroup]="form"
+        #contactForm="ngForm"
         (ngSubmit)="onSubmit()"
         style="display: flex; flex-direction: column;"
     >   
@@ -11,24 +10,19 @@
                 matInput
                 placeholder="First Name"
                 type="text"
-                formControlName="firstName"
+                [(ngModel)]="contact.firstName"
+                name="firstName"
+                required
                 >
         </mat-form-field>
-
-        <!-- <mat-form-field>
-            <input
-                matInput
-                placeholder="Middle Name"
-                type="text"
-                formControlName="middleName"
-                >
-        </mat-form-field> -->
         
         <mat-form-field>
             <input
                 matInput
                 placeholder="Last Name"
-                formControlName="lastName"
+                [(ngModel)]="contact.lastName"
+                name="lastName"
+                required
                 type="text">
         </mat-form-field>
 
@@ -36,7 +30,8 @@
             <input
                 matInput
                 placeholder="Email"
-                formControlName="email"
+                [(ngModel)]="contact.email"
+                name="email"
                 type="email">
         </mat-form-field>
 
@@ -45,52 +40,68 @@
                 matInput
                 [matDatepicker]="picker"
                 placeholder="Choose a date"
-                formControlName="birthdate"
+                [(ngModel)]="contact.birthdate"
+                name="birthdate"
                 [max]="maxDatepickerDate"
                 >
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
-        <!-- <div formArrayName="phones">
+        <div>
             <mat-card-title style="display: flex; justify-content: space-between;">
                 Phones
 
-                <button mat-button color="primary" (click)="addNewPhone()">Add new phone</button>
+                <button mat-button color="primary" (click)="addNewPhone()" type="button">Add new phone</button>
             </mat-card-title>
             
             <div
-                *ngFor="let phone of form.get('phones').controls; let i = index"
-                [formGroupName]="i"
+                *ngFor="let phone of contact.phones; let i = index"
             >
-                <mat-form-field >
-                    <input
-                        matInput
-                        placeholder="Phone Number"
-                        formControlName="number"
-                        type="text">
-                </mat-form-field>
-
-                <mat-form-field>
-                    <mat-select placeholder="Phone Type" formControlName="type">
-                        <mat-option *ngFor="let type of phoneTypes" [value]="type.value">
-                            {{type.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-icon style="cursor: pointer;" (click)="removePhone(i)">delete</mat-icon>
+                <div *ngIf="!phone.deleted">
+                    <mat-form-field >
+                        <input
+                            matInput
+                            placeholder="Country Code"
+                            [(ngModel)]="phone.localNumber.countryCode"
+                            name="countryCode{{i}}"
+                            required
+                            type="text">
+                    </mat-form-field>
+                    <mat-form-field >
+                        <input
+                            matInput
+                            placeholder="Phone Number"
+                            [(ngModel)]="phone.localNumber.number"
+                            name="phoneNumber{{i}}"
+                            required
+                            type="text">
+                    </mat-form-field>
+    
+                    <mat-form-field>
+                        <mat-select placeholder="Phone Type"
+                                    [(ngModel)]="phone.phoneType"
+                                    name="phoneType{{i}}">
+                            <mat-option *ngFor="let type of phoneTypes.values()" [value]="phoneTypes[type]">
+                                {{type}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+    
+                    <mat-icon style="cursor: pointer;" (click)="removePhone(i)">delete</mat-icon>
+                </div>
             </div>
-        </div>  -->
+        </div>
 
-        <div formGroupName="address" style="width: 100%; display: flex; flex-direction: column;">
+        <div style="width: 100%; display: flex; flex-direction: column;">
             <mat-card-title>Address</mat-card-title>
 
             <mat-form-field >
                 <input
                     matInput
                     placeholder="Country"
-                    formControlName="country"
+                    [(ngModel)]="contact.address.country"
+                    name="country"
                     type="text">
             </mat-form-field>
 
@@ -98,7 +109,8 @@
                 <input
                     matInput
                     placeholder="City"
-                    formControlName="city"
+                    [(ngModel)]="contact.address.city"
+                    name="city"
                     type="text">
             </mat-form-field>
 
@@ -106,7 +118,8 @@
                 <input
                     matInput
                     placeholder="Street"
-                    formControlName="street"
+                    [(ngModel)]="contact.address.street"
+                    name="street"
                     type="text">
             </mat-form-field>
 
@@ -114,7 +127,8 @@
                 <input
                     matInput
                     placeholder="Building"
-                    formControlName="building"
+                    [(ngModel)]="contact.address.building"
+                    name="building"
                     type="text">
             </mat-form-field>
 
@@ -122,7 +136,8 @@
                 <input
                     matInput
                     placeholder="Appartment"
-                    formControlName="appartment"
+                    [(ngModel)]="contact.address.appartment"
+                    name="appartment"
                     type="text">
             </mat-form-field>
 
@@ -130,11 +145,16 @@
                 <input
                     matInput
                     placeholder="Zip Code"
-                    formControlName="zipCode"
+                    [(ngModel)]="contact.address.zipCode"
+                    name="zipCode"
                     type="text">
             </mat-form-field>
         </div>
 
-        <button mat-raised-button color="primary">{{ isContactNew ? "Create" : "Update" }} Contact</button>
+        <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!contactForm.form.valid"
+            >{{ isContactNew ? "Create" : "Update" }} Contact</button>
     </form>
 </mat-card>

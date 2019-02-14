@@ -1,102 +1,64 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
-import { WebService } from '../web.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { ContactsService } from '../services/contacts.service';
 import { ActivatedRoute } from '@angular/router';
+import { Contact } from '../models/contact.model';
+import { PhoneTypes } from '../enums/phoneTypes';
+import { Phone } from '../models/phone.model';
 
 @Component({
     selector: 'app-contact',
     templateUrl: './contact.component.html',
 })
 export class ContactComponent implements OnInit {
-    form;
-    contactId;
-    isContactNew = true;
-    maxDatepickerDate = new Date();
+    @ViewChild('contactForm') contactForm: NgForm;;
+    private contactId: string;
+    private isContactNew: boolean = true;
+    private maxDatepickerDate: Date = new Date();
+    private contact = new Contact();
+    private phoneTypes = PhoneTypes;
 
     constructor(
-        private fb: FormBuilder,
-        private webService: WebService,
+        private contactsService: ContactsService,
         private router: ActivatedRoute,
-    ) {
-        this.fb = fb;
-        this.router = router;
-    }
+    ) {}
 
     ngOnInit() {
         this.contactId = this.router.snapshot.params.contactId;
-        let contact = {};
+
         if (this.contactId) {
             this.isContactNew = false;
-            this.webService.getContactById(this.contactId)
+            this.contactsService.getContactById(this.contactId)
                 .subscribe(
-                    (contact) => {
-                        this.createForm(contact);
+                    (contact: Contact) => {
+                        this.contact = contact;
                     }
                 );
-        } else {
-            this.createForm(contact);
         }
     }
 
-    createForm({
-        firstName = '',
-        lastName = '',
-        email = '',
-        birthdate = '',
-        address = {},
-    }: any) {
-        // const phonesArray = new FormArray([]);
-        const addressFormGroup = new FormGroup({
-            country: new FormControl(address.country || ''),
-            city: new FormControl(address.city || ''),
-            street: new FormControl(address.street || ''),
-            building: new FormControl(address.building || ''),
-            appartments: new FormControl(address.appartments || ''),
-            zipCode: new FormControl(address.zipCode || ''),
-        })
-
-        // for (const phone of phones) {
-        //     phonesArray.push(
-        //         new FormGroup({
-        //             number: new FormControl( phone.number, Validators.required ),
-        //             type: new FormControl( phone.type, Validators.required )
-        //         })
-        //     );
-        // }
+    addNewPhone() {
+        if (!this.contact.phones) {
+            this.contact.phones = [];
+        }
         
-        this.form = this.fb.group({
-            firstName: [firstName, Validators.required],
-            lastName: [lastName, Validators.required],
-            email: [email],
-            address: addressFormGroup,
-            birthdate: birthdate,
-            // phones: phonesArray,
-        });
+        this.contact.phones.push(new Phone());
     }
 
-    // addNewPhone() {
-    //     const phonesFormArray = this.form.get('phones');
-        
-    //     phonesFormArray.push(
-    //         new FormGroup({
-    //             number: new FormControl( null, Validators.required ),
-    //             type: new FormControl( null, Validators.required )
-    //         })
-    //     )
-    // }
-
-    // removePhone(index) {
-    //     const phonesFormArray = this.form.get('phones');
-        
-    //     phonesFormArray.removeAt(index);
-    // }
+    removePhone(index) {
+        if (this.contact.phones[index].isNew) {
+            this.contact.phones.splice(index, 1);
+        } else {
+            this.contact.phones[index].deleted = true;
+        }
+    }
 
     onSubmit() {
-        if (this.form.valid) {
+        if (this.contactForm.valid) {
             if (this.isContactNew) {
-                this.webService.createContact({ ...this.form.value });
+                this.contactsService.createContact(this.contact);
             } else {
-                this.webService.updateContact({ ...this.form.value }, this.contactId)
+                this.contactsService.updateContact(this.contact, this.contactId)
             }
         }
     }

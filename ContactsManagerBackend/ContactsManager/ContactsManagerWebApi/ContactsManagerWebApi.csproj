@@ -165,12 +165,16 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MapperInitializator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\PhonesController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
+    <Compile Include="Enums\PhoneType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\Phone.cs" />
+    <Compile Include="Models\PhoneNumber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
