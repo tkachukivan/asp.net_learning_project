@@ -14,12 +14,14 @@ namespace ContactsManagerWebApi.Controllers
         private PhonesManager PhonesManager { get; } = new PhonesManager();
 
         [Route("")]
+        [HttpGet]
         public IHttpActionResult Get(Guid contactId)
         {
             return Ok<List<Phone>>(Mapper.Map<List<Phone>>(PhonesManager.GetPhones(contactId)));
         }
 
         [Route("{Id}")]
+        [HttpGet]
         public IHttpActionResult Get(Guid contactId, Guid Id)
         {
             var phone = PhonesManager.GetPhone(contactId, Id);
@@ -38,10 +40,7 @@ namespace ContactsManagerWebApi.Controllers
         [HttpPost]
         public IHttpActionResult Post(Guid contactId, [FromBody] Phone phone)
         {
-            if (
-                phone == null ||
-                phone.Number.Number == null
-                )
+            if (phone?.LocalNumber.Number == null)
             {
                 return BadRequest();
             }
@@ -55,10 +54,7 @@ namespace ContactsManagerWebApi.Controllers
         [HttpPut]
         public IHttpActionResult Put(Guid contactId, Guid Id, [FromBody] Phone phone)
         {
-            if (
-                phone == null ||
-                phone.Number.Number == null
-                )
+            if (phone?.LocalNumber.Number == null)
             {
                 return BadRequest();
             }

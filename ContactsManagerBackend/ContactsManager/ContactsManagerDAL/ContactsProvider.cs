@@ -40,7 +40,7 @@ namespace ContactsManagerDAL
 
         public Contact GetContact(Guid Id)
         {
-            var contact = new Contact();
+            Contact contact = null;
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
@@ -54,13 +54,10 @@ namespace ContactsManagerDAL
 
                 if (reader.Read())
                 {
+                    contact = new Contact();
                     contact.LoadDataFromReader(reader);
                     contact.Address = new Address();
                     contact.Address.LoadDataFromReader(reader);
-                }
-                else
-                {
-                    contact = null;
                 }
             }
 

@@ -12,7 +12,7 @@ namespace ContactsManagerDAL
     {
         public List<Phone> GetPhones(Guid contactId)
         {
-            List<Phone> Phones = new List<Phone>();
+            var Phones = new List<Phone>();
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
@@ -41,7 +41,7 @@ namespace ContactsManagerDAL
 
         public Phone GetPhone(Guid contactId, Guid Id)
         {
-            var phone = new Phone();
+            Phone phone = null;
 
             using (SqlConnection conn = DBConnection.GetSqlConnection())
             using (SqlCommand cmd = conn.CreateCommand())
@@ -56,11 +56,8 @@ namespace ContactsManagerDAL
 
                 if (reader.Read())
                 {
+                    phone = new Phone();
                     phone.LoadDataFromReader(reader);
-                }
-                else
-                {
-                    phone = null;
                 }
             }
 
@@ -69,12 +66,9 @@ namespace ContactsManagerDAL
 
         public Phone CreatePhone(Guid contactId, Phone phone)
         {
-            if (
-                phone == null ||
-                phone.Number.Number == null
-                )
+            if (phone?.LocalNumber.Number == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(phone));
             }
 
             var createdPhone = new Phone();
@@ -88,8 +82,8 @@ namespace ContactsManagerDAL
 
                 cmd.Parameters.AddNewParameter("Id", SqlDbType.UniqueIdentifier, phone.Id);
                 cmd.Parameters.AddNewParameter("ContactId", SqlDbType.UniqueIdentifier, contactId);
-                cmd.Parameters.AddNewParameter("CountryCode", SqlDbType.NVarChar, phone.Number.CountryCode);
-                cmd.Parameters.AddNewParameter("PhoneNumber", SqlDbType.NVarChar, phone.Number.Number);
+                cmd.Parameters.AddNewParameter("CountryCode", SqlDbType.NVarChar, phone.LocalNumber.CountryCode);
+                cmd.Parameters.AddNewParameter("PhoneNumber", SqlDbType.NVarChar, phone.LocalNumber.Number);
                 cmd.Parameters.AddNewParameter("PhoneType", SqlDbType.Int, phone.PhoneType);
 
                 var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -105,12 +99,9 @@ namespace ContactsManagerDAL
 
         public void UpdatePhone(Guid contactId, Guid Id, Phone phone)
         {
-            if (
-                phone == null ||
-                phone.Number.Number == null
-                )
+            if (phone?.LocalNumber.Number == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(phone));
             }
 
 
@@ -122,8 +113,8 @@ namespace ContactsManagerDAL
 
                 cmd.Parameters.AddNewParameter("Id", SqlDbType.UniqueIdentifier, phone.Id);
                 cmd.Parameters.AddNewParameter("ContactId", SqlDbType.UniqueIdentifier, contactId);
-                cmd.Parameters.AddNewParameter("CountryCode", SqlDbType.NVarChar, phone.Number.CountryCode);
-                cmd.Parameters.AddNewParameter("PhoneNumber", SqlDbType.NVarChar, phone.Number.Number);
+                cmd.Parameters.AddNewParameter("CountryCode", SqlDbType.NVarChar, phone.LocalNumber.CountryCode);
+                cmd.Parameters.AddNewParameter("PhoneNumber", SqlDbType.NVarChar, phone.LocalNumber.Number);
                 cmd.Parameters.AddNewParameter("PhoneType", SqlDbType.Int, phone.PhoneType);
 
                 cmd.ExecuteNonQuery();

@@ -18,12 +18,9 @@ namespace ContactsManagerBL
 
         public Phone CreatePhone(Guid contactId, Phone phone)
         {
-            if (
-                phone == null ||
-                phone.Number.Number == null
-                )
+            if (phone?.LocalNumber.Number == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(phone));
             }
 
             var createdPhone = PhonesProvider.CreatePhone(contactId, Mapper.Map<PhoneDAL>(phone));
@@ -33,12 +30,9 @@ namespace ContactsManagerBL
 
         public void UpdatePhone(Guid contactId, Guid Id, Phone phone)
         {
-            if (
-                phone == null ||
-                phone.Number.Number == null
-                )
+            if (phone?.LocalNumber.Number == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(phone));
             }
 
             PhonesProvider.UpdatePhone(contactId, Id, Mapper.Map<PhoneDAL>(phone));
