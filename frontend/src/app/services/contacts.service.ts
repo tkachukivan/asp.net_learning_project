@@ -4,15 +4,15 @@ import { MatSnackBar } from '@angular/material';
 import { Subject, AsyncSubject, forkJoin, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Contact } from '../models/contact.model'; 
-import { Phone } from '../models/phone.model'; 
+import { Contact } from '../models/contact.model';
+import { Phone } from '../models/phone.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ContactsService {
 
-    private BASE_URL: string = 'http://localhost:8888/api';
+    private BASE_URL = 'http://localhost:8888/api';
 
     private contactsStore: Array<Contact> = [];
 
@@ -47,7 +47,7 @@ export class ContactsService {
             .subscribe((res: any) => {
                 const contactModel: Contact = res[0];
                 contactModel.phones = res[1];
-                
+
                 subject.next(contactModel);
                 subject.complete();
             });
@@ -63,7 +63,7 @@ export class ContactsService {
             .post(`${this.BASE_URL}/contacts`, contact)
             .pipe(
                 mergeMap((res: Contact) => {
-                    return this.createPhones(res.id, contactPhones)
+                    return this.createPhonesRequests(res.id, contactPhones);
                 })
             ).subscribe(
                 () => {
@@ -75,29 +75,14 @@ export class ContactsService {
     }
 
     updateContact(contact: Contact, contactId: string) {
-        const contactPhones = { create: [], update: [], remove: [] };
-
-        contact.phones.reduce((acc, phone) => {
-            if (phone.isNew) {
-                acc.create.push(phone)
-            } else if (phone.deleted) {
-                acc.remove.push(phone)
-            } else {
-                acc.update.push(phone)
-            }
-
-            return acc;
-        }, contactPhones)
-        
+        const contactPhones = [...contact.phones];
         delete contact.phones;
 
         const updateContactRequest = this.http
-            .put(`${this.BASE_URL}/contacts/${contactId}`, contact)
+            .put(`${this.BASE_URL}/contacts/${contactId}`, contact);
         forkJoin([
             updateContactRequest,
-            this.createPhones(contact.id, contactPhones.create),
-            this.updatePhones(contact.id, contactPhones.update),
-            this.removePhones(contact.id, contactPhones.remove),
+            this.createPhonesRequests(contact.id, contactPhones)
         ])
             .subscribe(
                 (res: any) => {
@@ -121,41 +106,23 @@ export class ContactsService {
             );
     }
 
-    createPhones(contactId: string, phones: Array<Phone>) {
-        const createPhoneRequests = phones
-            .map((phone) => {
-                return this.http.post(`${this.BASE_URL}/contacts/${contactId}/phones`, phone)
-            });
-        if (createPhoneRequests.length === 0) {
+    createPhonesRequests(contactId: string, phones: Array<Phone>) {
+        const requests = phones.reduce((acc, phone) => {
+            if (phone.isNew) {
+                acc.push(this.http.post(`${this.BASE_URL}/contacts/${contactId}/phones`, phone));
+            } else if (phone.deleted) {
+                acc.push(this.http.delete(`${this.BASE_URL}/contacts/${contactId}/phones/${phone.id}`));
+            } else {
+                acc.push(this.http.put(`${this.BASE_URL}/contacts/${contactId}/phones/${phone.id}`, phone));
+            }
+
+            return acc;
+        }, []);
+
+        if (requests.length === 0) {
             return of([]);
         } else {
-            return forkJoin(createPhoneRequests);
-        }
-    }
-
-    updatePhones(contactId: string, phones: Array<Phone>) {
-        const createPhoneRequests = phones
-            .map((phone) => {
-                return this.http.put(`${this.BASE_URL}/contacts/${contactId}/phones/${phone.id}`, phone)
-            });
-
-        if (createPhoneRequests.length === 0) {
-            return of([]);
-        } else {
-            return forkJoin(createPhoneRequests);
-        }
-    }
-
-    removePhones(contactId: string, phones: Array<Phone>) {
-        const createPhoneRequests = phones
-            .map((phone) => {
-                return this.http.delete(`${this.BASE_URL}/contacts/${contactId}/phones/${phone.id}`)
-            });
-
-        if (createPhoneRequests.length === 0) {
-            return of([]);
-        } else {
-            return forkJoin(createPhoneRequests);
+            return forkJoin(requests);
         }
     }
 }

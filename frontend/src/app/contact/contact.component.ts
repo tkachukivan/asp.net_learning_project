@@ -11,9 +11,9 @@ import { Phone } from '../models/phone.model';
     templateUrl: './contact.component.html',
 })
 export class ContactComponent implements OnInit {
-    @ViewChild('contactForm') contactForm: NgForm;;
+    @ViewChild('contactForm') contactForm: NgForm;
     private contactId: string;
-    private isContactNew: boolean = true;
+    private isContactNew = true;
     private maxDatepickerDate: Date = new Date();
     private contact = new Contact();
     private phoneTypes = PhoneTypes;
@@ -41,7 +41,7 @@ export class ContactComponent implements OnInit {
         if (!this.contact.phones) {
             this.contact.phones = [];
         }
-        
+
         this.contact.phones.push(new Phone());
     }
 
@@ -58,7 +58,7 @@ export class ContactComponent implements OnInit {
             if (this.isContactNew) {
                 this.contactsService.createContact(this.contact);
             } else {
-                this.contactsService.updateContact(this.contact, this.contactId)
+                this.contactsService.updateContact(this.contact, this.contactId);
             }
         }
     }

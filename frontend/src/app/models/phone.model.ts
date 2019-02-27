@@ -1,14 +1,14 @@
-import { PhoneTypes } from "../enums/phoneTypes";
-
-export class Phone {
-    public id: string = '';
-    public localNumber: PhoneNumber = new PhoneNumber();
-    public phoneType: PhoneTypes = PhoneTypes.Home;
-    public isNew: boolean = true;
-    public deleted: boolean = false;
-}
+import { PhoneTypes } from '../enums/phoneTypes';
 
 export class PhoneNumber {
-    countryCode: string = '';
-    number: string = '';
+    countryCode = '';
+    number = '';
+}
+
+export class Phone {
+    public id = '';
+    public localNumber: PhoneNumber = new PhoneNumber();
+    public phoneType: PhoneTypes = PhoneTypes.Home;
+    public isNew = true;
+    public deleted = false;
 }
